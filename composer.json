@@ -1,0 +1,44 @@
+{
+    "name": "vangenplotz/imageshop",
+    "description": "Integrate with an Imageshop account and use Imageshop resources in Craft",
+    "type": "craft-plugin",
+    "version": "0.0.8",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "imageshop"
+    ],
+    "support": {
+        "docs": "https://github.com/vangenplotz/imageshop/blob/master/README.md",
+        "issues": "https://github.com/vangenplotz/imageshop/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vangen & Plotz AS",
+            "homepage": "https://vangenplotz.no/"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "vangenplotz\\imageshop\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Imageshop",
+        "handle": "imageshop",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/vangenplotz/imageshop/master/CHANGELOG.md",
+        "components": {
+            "search": "vangenplotz\\imageshop\\services\\Search",
+            "soap": "vangenplotz\\imageshop\\services\\Soap"
+        },
+        "class": "vangenplotz\\imageshop\\Imageshop"
+    }
+}

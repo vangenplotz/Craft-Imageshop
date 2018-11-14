@@ -1,0 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Imageshop plugin for Craft CMS
+ *
+ * ImageshopImage Field Settings
+ *
+ * @author    Vangen & Plotz AS
+ * @copyright Copyright (c) 2018 Vangen & Plotz AS
+ * @link      https://vangenplotz.no/
+ * @package   Imageshop
+ * @since     0.0.1
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("vangenplotz\\imageshop\\assetbundles\\imageshop\\ImageshopAsset") %}
+
+{{ forms.textField({
+    label: 'Some Attribute',
+    instructions: 'Enter some attribute here.',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: field['someAttribute']})
+}}

@@ -1,0 +1,30 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Imageshop plugin for Craft CMS 3.x
+ *
+ * ImageshopImage Field Input
+ *
+ * @author    Vangen & Plotz AS
+ * @copyright Copyright (c) 2018 Vangen & Plotz AS
+ * @link      https://vangenplotz.no/
+ * @package   Imageshop
+ * @since     0.0.1
+ */
+#}
+
+<input type="hidden" name="{{ name }}" id="{{ id }}" value="{{ value }}">
+
+<button type="button" id="button-{{ id }}">{{ 'Add image' | t }}</button>
+<div style="display: none;">
+  <div id="modal-{{ id }}" class="modal">
+    <div class="body">
+      <header class="header">
+        <h2>{{ 'Add image' | t }}</h2>
+      </header>
+      <div style="overflow: auto;">
+        <ul id="modal-results-{{ id }}"></ul>
+      </div>
+    </div>
+  </div>
+</div>

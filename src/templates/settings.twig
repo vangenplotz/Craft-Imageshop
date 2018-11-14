@@ -1,0 +1,34 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Imageshop plugin for Craft CMS 3.x
+ *
+ * Imageshop Settings.twig
+ *
+ * @author    Vangen & Plotz AS
+ * @copyright Copyright (c) 2018 Vangen & Plotz AS
+ * @link      https://vangenplotz.no/
+ * @package   Imageshop
+ * @since     0.0.1
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("vangenplotz\\imageshop\\assetbundles\\imageshop\\ImageshopAsset") %}
+
+{{ forms.textField({
+    label: 'Token',
+    instructions: 'Imageshop token',
+    id: 'token',
+    name: 'token',
+    value: settings['token']})
+}}
+
+{{ forms.textField({
+    label: 'Interface name',
+    instructions: 'Your organization interface name',
+    id: 'interfaceName',
+    name: 'interfaceName',
+    value: settings['interfaceName']})
+}}
