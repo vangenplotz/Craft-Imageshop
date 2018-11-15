@@ -67,8 +67,7 @@ class Settings extends Model
         return [
             [['token', 'interfaceName'], 'required'],
             ['token', 'string'],
-            ['interfaceName', 'string'],
-            ['webServiceUrl', 'string']
+            ['interfaceName', 'string']
         ];
     }
 }

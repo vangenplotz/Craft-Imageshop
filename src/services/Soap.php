@@ -39,6 +39,43 @@ class Soap extends Component
      *
      * From any other plugin file, call it like this:
      *
+     *     Imageshop::$plugin->soap->interfaces()
+     *
+     * @return mixed
+     */
+    public function interfaces($token = '')
+    {
+        if( empty($token) ) {
+            $settings = Imageshop::$plugin->settings;
+            $token = $settings->token;
+        }
+
+        // If no token is sent or set in settings, return null
+        if( empty($token) ) {
+            return null;
+        }
+
+        $action = 'http://imageshop.no/V4/GetInterfaces';
+
+        $xml  = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        $xml .= "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n";
+        $xml .= "  <soap:Body>\n";
+        $xml .= "    <GetInterfaces xmlns=\"http://imageshop.no/V4\">\n";
+        $xml .= "      <token>" . $token . "</token>\n";
+        $xml .= "    </GetInterfaces>\n";
+        $xml .= "  </soap:Body>\n";
+        $xml .= "</soap:Envelope>";
+
+        return $this->_request($action, $xml);
+    }
+
+
+    /**
+     * This function can literally be anything you want, and you can have as many service
+     * functions as you want
+     *
+     * From any other plugin file, call it like this:
+     *
      *     Imageshop::$plugin->soap->search()
      *
      * @return mixed

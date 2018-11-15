@@ -10,7 +10,6 @@
 
 namespace vangenplotz\imageshop;
 
-use vangenplotz\imageshop\services\Search               as SearchService;
 use vangenplotz\imageshop\services\Soap                 as SoapService;
 use vangenplotz\imageshop\variables\ImageshopVariable;
 use vangenplotz\imageshop\models\Settings;

@@ -2,7 +2,7 @@
     "name": "vangenplotz/imageshop",
     "description": "Integrate with an Imageshop account and use Imageshop resources in Craft",
     "type": "craft-plugin",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "keywords": [
         "craft",
         "cms",
@@ -36,7 +36,6 @@
         "hasCpSection": false,
         "changelogUrl": "https://raw.githubusercontent.com/vangenplotz/imageshop/master/CHANGELOG.md",
         "components": {
-            "search": "vangenplotz\\imageshop\\services\\Search",
             "soap": "vangenplotz\\imageshop\\services\\Soap"
         },
         "class": "vangenplotz\\imageshop\\Imageshop"

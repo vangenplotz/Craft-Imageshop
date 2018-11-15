@@ -43,7 +43,7 @@ class ImageshopImage extends Field
      *
      * @var string
      */
-    public $someAttribute = 'Some Default';
+    public $buttonText = 'Add image';
 
     // Static Methods
     // =========================================================================
@@ -75,8 +75,8 @@ class ImageshopImage extends Field
     {
         $rules = parent::rules();
         $rules = array_merge($rules, [
-            ['someAttribute', 'string'],
-            ['someAttribute', 'default', 'value' => 'Some Default'],
+            ['buttonText', 'string'],
+            ['buttonText', 'default', 'value' => 'Add image'],
         ]);
         return $rules;
     }

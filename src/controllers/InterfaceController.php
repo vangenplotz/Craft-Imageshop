@@ -16,7 +16,7 @@ use Craft;
 use craft\web\Controller;
 
 /**
- * Search Controller
+ * Interface Controller
  *
  * Generally speaking, controllers are the middlemen between the front end of
  * the CP/website and your plugin’s services. They contain action methods which
@@ -35,7 +35,7 @@ use craft\web\Controller;
  * @package   Imageshop
  * @since     0.0.1
  */
-class SearchController extends Controller
+class InterfaceController extends Controller
 {
 
     // Protected Properties
@@ -59,44 +59,9 @@ class SearchController extends Controller
      */
     public function actionIndex()
     {
-        // Category ids, comma separated
-        $categoryIds = Craft::$app->getRequest()->getParam('categoryIds');
-        $searchString =  "cat:" . (empty($categoryIds) ? '' : $categoryIds);
+        $token = Craft::$app->getRequest()->getParam('token');
 
-        // Sub category ids, comma separated
-        $subCategoryIds = Craft::$app->getRequest()->getParam('subCategoryIds');
-        $searchString .= " sub:" . (empty($subCategoryIds) ? '' : $subCategoryIds);
-        
-        // Page number to view 0-indexed
-        $page = Craft::$app->getRequest()->getParam('page');
-        $searchString .= " page:" . (empty($page) ? 0 : $page);
-
-        // Pagesize, number of documents per page
-        $pageSize = Craft::$app->getRequest()->getParam('pagesize');
-        $searchString .= " pagesize:" . (empty($pageSize) ? 50 : $pageSize);;
-
-        // Author query
-        $author = Craft::$app->getRequest()->getParam('author');
-        $searchString .= " author:" . (empty($author) ? '' : $author);
-        
-        // Search query
-        $query = Craft::$app->getRequest()->getParam('query');
-        $searchString .= " " . (empty($query) ? '' : $query);
-
-
-        return $this->asJson(Imageshop::$plugin->soap->search($searchString));
+        return $this->asJson(Imageshop::$plugin->soap->interfaces($token));
     }
 
-    /**
-     * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/imageshop/search/do-something
-     *
-     * @return mixed
-     */
-/*    public function actionDoSomething()
-    {
-        $result = 'Welcome to the DefaultController actionDoSomething() method';
-
-        return $result;
-    }*/
 }

@@ -23,8 +23,8 @@
  */
 
 return [
-
+    "interfaceName" => "",
     // This controls blah blah blah
-    "someAttribute" => true,
+    "token" => "",
 
 ];

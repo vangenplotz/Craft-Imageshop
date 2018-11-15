@@ -25,10 +25,76 @@
     value: settings['token']})
 }}
 
-{{ forms.textField({
-    label: 'Interface name',
-    instructions: 'Your organization interface name',
-    id: 'interfaceName',
-    name: 'interfaceName',
-    value: settings['interfaceName']})
-}}
+<div class="field">
+  <div class="heading">
+    <label for="imageshop-settings-interface-name">Interface name</label>
+  </div>
+  <div class="input ltr">
+    <div class="flex">
+      <div class="select s3-bucket-select">
+        <select id="imageshop-settings-interface-name" name="interfaceName">
+        </select>
+      </div>
+
+      <div class="btn" id="imageshop-settings-interface-refresh-button">Refresh</div>
+      <div class="spinner hidden"  id="imageshop-settings-interface-refresh-button-spinner"></div>
+    </div>
+
+  </div>
+</div>
+
+
+{% js %}
+  var imageshopSettingsPageInterfaceSelect = $('#settings-imageshop-settings-interface-name').first();
+  var imageshopSettingsPageInterfaceRefreshButton = $('#settings-imageshop-settings-interface-refresh-button').first();
+  var imageshopSettingsPageInterfaceRefreshButtonSpinner = $('#settings-imageshop-settings-interface-refresh-button-spinner').first();
+  var imageshopSettingsPageInterfaceValue = '{{ settings['interfaceName'] }}';
+
+  imageshopSettingsPageInterfaceRefreshButton.click(function() {
+    imageshopSettingsPageInterfaceRefreshOptions();
+  });
+
+  {% if settings['token'] is not empty %}
+    imageshopSettingsPageInterfaceRefreshOptions();
+  {% endif %}
+
+  function imageshopSettingsPageInterfaceRefreshOptions() {
+    var imageshopSettingsPageTokenValue = $('#settings-token').first().val();
+
+    if( imageshopSettingsPageTokenValue ) {
+      imageshopSettingsPageInterfaceRefreshButton.prop('disabled', true);
+      imageshopSettingsPageInterfaceRefreshButtonSpinner.removeClass('hidden');
+
+      var data = {
+        action: 'imageshop/interface',
+        token: imageshopSettingsPageTokenValue
+      }
+
+      var tokenName = Craft.csrfTokenName;
+      data[tokenName] = Craft.csrfTokenValue;
+
+      $.ajax({
+        type: 'post',
+        url: '',
+        data: data
+      })
+        .done(function(result) {
+          var options = result && result.GetInterfacesResponse.GetInterfacesResult.Interface;
+          
+          imageshopSettingsPageInterfaceRefreshButton.prop('disabled', false);
+          imageshopSettingsPageInterfaceRefreshButtonSpinner.addClass('hidden');
+
+          if( options && options.length ) {
+            
+            imageshopSettingsPageInterfaceSelect.empty();
+
+            $.each(options, function(index, option) {
+              imageshopSettingsPageInterfaceSelect.append('<option value="' + option.Path + '"' + (imageshopSettingsPageInterfaceValue && option.Path === imageshopSettingsPageInterfaceValue ? "selected" : "" ) + '>' + option.Name + '</option>')
+            });
+
+          }
+        });
+    }
+  }
+
+{% endjs %}

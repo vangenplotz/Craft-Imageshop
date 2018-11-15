@@ -32,12 +32,12 @@
 
         init: function(id) {
             var _this = this;
-            var documentList = $("#fields-modal-results-" + _this.options.id);
+            var documentList = $("#" + _this.options.prefix + "modal-results-" + _this.options.id);
 
-            $("#fields-button-" + _this.options.id ).click(function() {
+            $("#" + _this.options.prefix + "button-" + _this.options.id ).click(function() {
                 event.preventDefault();
-                $modal = new Garnish.Modal($("#fields-modal-" + _this.options.id)); //create a new modal
-                $modal.show(); //shows the modal
+                $modal = new Garnish.Modal($("#" + _this.options.prefix + "modal-" + _this.options.id)); //create a new modal
+                //$modal.show(); //shows the modal
 
                 $.ajax('/actions/imageshop/search')
                     .done(function(result) {
@@ -46,20 +46,11 @@
                         documentList.empty();
 
                         $.each(resultItems, function(index, value) {
-                            console.log(value)
-                            documentList.append("<li><img src=\"" + value.SquareListThumbUrl + "\"></li>")
+                            documentList.append("<li><div class=\"element large hasthumb\"><div class=\"elementthumb\"><img src=\"" + value.ListThumbUrl + "\"></div><div class=\"label\">" + value.Name + "</div></div></li>")
                         })
                     })
 
              });
-
-            $(function () {
-                console.log(_this.options)
-/* -- _this.options gives us access to the $jsonVars that our FieldType passed down to us */
-
-                
-
-            });
         }
     };
 
