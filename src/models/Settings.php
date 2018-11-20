@@ -49,6 +49,13 @@ class Settings extends Model
     public $interfaceName = '';
 
 
+    /**
+     * Imageshop language
+     *
+     * @var string
+     */
+    public $language = 'no';
+
     // Public Methods
     // =========================================================================
 
@@ -65,9 +72,10 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['token', 'interfaceName'], 'required'],
+            [['token', 'interfaceName', 'language'], 'required'],
             ['token', 'string'],
-            ['interfaceName', 'string']
+            ['interfaceName', 'string'],
+            ['language', 'string']
         ];
     }
 }

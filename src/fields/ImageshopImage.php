@@ -350,7 +350,8 @@ class ImageshopImage extends Field
             'prefix' => Craft::$app->getView()->namespaceInputId(''),
             ];
         $jsonVars = Json::encode($jsonVars);
-        Craft::$app->getView()->registerJs("$('#{$namespacedId}-field').ImageshopImageshopImage(" . $jsonVars . ");");
+        //Craft::$app->getView()->registerJs("$('#{$namespacedId}-field').ImageshopImageshopImage(" . $jsonVars . ");");
+        Craft::$app->getView()->registerJs('window.initVueImageshop("' . $namespacedId . '")');
 
         // Render the input template
         return Craft::$app->getView()->renderTemplate(

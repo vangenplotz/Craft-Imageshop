@@ -13,7 +13,11 @@
  */
 #}
 
-<input type="hidden" name="{{ name }}" id="{{ id }}" value="{{ value }}">
+<div id="{{ id }}">
+  <imageshop namespaced-id="{{ namespacedId }}" init-value="{{ value }}"></imageshop>
+</div>
+
+{# <input type="hidden" name="{{ name }}" id="{{ id }}" value="{{ value }}">
 
 <div id="button-{{ id }}" class="btn add icon dashed">{{ field.buttonText | t }}</div>
 <div style="display: none;">
@@ -29,13 +33,13 @@
                 <div class="clear hidden" title="Fjern"></div>
               </div>
               
-{#               <div>
+              <div>
                 <div class="btn menubtn sortmenubtn" title="Sorter etter     Tittel" data-icon="asc" tabindex="0" role="combobox" aria-owns="menu.Garnish836907787" aria-haspopup="true" aria-expanded="false">    Tittel</div>     
               </div>
               <div class="btngroup"><div data-view="table" role="button" class="btn" title="Vis som liste" data-icon="list"></div><div data-view="thumbs" role="button" class="btn active" title="Vis som miniatyrbilder" data-icon="grid"></div>   
-             #}
+            
             </div>
-            {# <div class="spinner invisible"></div> #}
+            <div class="spinner invisible"></div>
           </div>
           <div class="elements">
             <ul id="modal-results-{{ id }}" class="thumbsview"></ul>
@@ -58,4 +62,4 @@
     </div>
 
   </div>
-</div>
+</div> #}

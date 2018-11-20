@@ -25,6 +25,20 @@
     value: settings['token']})
 }}
 
+{{ forms.selectField({
+    label: 'Language',
+    id: 'language'.
+    name: 'language',
+    options: [{
+      label: 'Norsk',
+      value: 'no'
+    }, {
+      label: 'English',
+      value: 'en'
+    }],
+    value: settings['language']})
+}}
+
 <div class="field">
   <div class="heading">
     <label for="imageshop-settings-interface-name">Interface name</label>

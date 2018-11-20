@@ -69,6 +69,40 @@ class Soap extends Component
         return $this->_request($action, $xml);
     }
 
+    /**
+     * This function can literally be anything you want, and you can have as many service
+     * functions as you want
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Imageshop::$plugin->soap->getImage()
+     *
+     * @return mixed
+     */
+    public function getImage($documentId)
+    {
+        $settings = Imageshop::$plugin->settings;
+        $token = $settings->token;
+        $action = 'http://imageshop.no/V4/CreatePermaLinkFromDocumentId';
+
+        $width = 100;
+        $height = 100;
+        
+        $xml  = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        $xml .= "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n";
+        $xml .= "  <soap:Body>\n";
+        $xml .= "    <CreatePermaLinkFromDocumentId xmlns=\"http://imageshop.no/V4\">\n";
+        $xml .= "      <token>" . $token . "</token>\n";
+        $xml .= "      <documentid>" . $documentId . "</documentid>\n";
+        $xml .= "      <width>" . $width . "</width>\n";
+        $xml .= "      <height>" . $height . "</height>\n";
+        $xml .= "    </CreatePermaLinkFromDocumentId>\n";
+        $xml .= "  </soap:Body>\n";
+        $xml .= "</soap:Envelope>";
+
+        return $this->_request($action, $xml);
+    }
+
 
     /**
      * This function can literally be anything you want, and you can have as many service
