@@ -25,17 +25,21 @@
     value: settings['token']})
 }}
 
+{% set languages = [
+  {
+    label: 'Norsk',
+    value: 'no'
+  }, {
+    label: 'English',
+    value: 'en'
+  }
+] %}
+
 {{ forms.selectField({
     label: 'Language',
-    id: 'language'.
+    id: 'language',
     name: 'language',
-    options: [{
-      label: 'Norsk',
-      value: 'no'
-    }, {
-      label: 'English',
-      value: 'en'
-    }],
+    options: languages,
     value: settings['language']})
 }}
 
@@ -47,6 +51,7 @@
     <div class="flex">
       <div class="select s3-bucket-select">
         <select id="imageshop-settings-interface-name" name="interfaceName">
+          <option value="{{ settings['interfaceName'] }}">{{ settings['interfaceName'] }}</option>
         </select>
       </div>
 

@@ -16,7 +16,7 @@ use Craft;
 use craft\web\Controller;
 
 /**
- * Search Controller
+ * Categories Controller
  *
  * Generally speaking, controllers are the middlemen between the front end of
  * the CP/website and your plugin’s services. They contain action methods which
@@ -35,7 +35,7 @@ use craft\web\Controller;
  * @package   Imageshop
  * @since     0.0.1
  */
-class SearchController extends Controller
+class CategoriesController extends Controller
 {
 
     // Protected Properties
@@ -53,52 +53,13 @@ class SearchController extends Controller
 
     /**
      * Handle a request going to our plugin's index action URL,
-     * e.g.: actions/imageshop/search
+     * e.g.: actions/imageshop/categories
      *
      * @return json
      */
     public function actionIndex()
     {
-        // Category ids, comma separated
-        $categoryIds = Craft::$app->getRequest()->getParam('categoryIds');
-        $searchString =  "cat:" . (empty($categoryIds) ? '' : $categoryIds);
-
-        // Sub category ids, comma separated
-        $subCategoryIds = Craft::$app->getRequest()->getParam('subCategoryIds');
-        $searchString .= " sub:" . (empty($subCategoryIds) ? '' : $subCategoryIds);
-        
-        // Page number to view 0-indexed
-        $page = Craft::$app->getRequest()->getParam('page');
-        $searchString .= " page:" . (empty($page) ? 0 : $page);
-
-        // Pagesize, number of documents per page
-        $pageSize = Craft::$app->getRequest()->getParam('pagesize');
-        $searchString .= " pagesize:" . (empty($pageSize) ? 50 : $pageSize);;
-
-        // Author query
-        $author = Craft::$app->getRequest()->getParam('author');
-        $searchString .= " author:" . (empty($author) ? '' : $author);
-        
-        // Search query
-        $query = Craft::$app->getRequest()->getParam('query');
-        $searchString .= " " . (empty($query) ? '' : $query);
-
-
-        return $this->asJson(Imageshop::$plugin->soap->search($searchString));
-    }
-
-    /**
-     * Show data for a single search result,
-     * e.g.: actions/imageshop/search/show
-     * Send the documentId as a body param
-     *
-     * @return json
-     */
-    public function actionShow()
-    {
-        $documentId = Craft::$app->getRequest()->getParam('documentId');
-
-        return $this->asJson(Imageshop::$plugin->soap->getImageData($documentId));
+        return $this->asJson(Imageshop::$plugin->soap->categories());
     }
 
 }

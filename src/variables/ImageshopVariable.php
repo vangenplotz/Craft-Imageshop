@@ -35,22 +35,53 @@ class ImageshopVariable
      * Whatever you want to output to a Twig template can go into a Variable method.
      * You can have as many variable functions as you want.  From any Twig template,
      * call it like this:
-     *
-     *     {{ craft.imageshop.exampleVariable }}
-     *
-     * Or, if your variable requires parameters from Twig:
-     *
-     *     {{ craft.imageshop.exampleVariable(twigValue) }}
+
+     *     {{ craft.imageshop.show(documentId) }}
      *
      * @param null $optional
      * @return string
      */
-    public function exampleVariable($optional = null)
+    public function all($documentsString)
     {
-        $result = "And away we go to the Twig template...";
-        if ($optional) {
-            $result = "I'm feeling optional today...";
+        $documentIds = explode(',', $documentsString);
+        $imageArray = [];
+
+        foreach ($documentIds as $documentId) {
+            $imageArray[] = Imageshop::$plugin->image->transformImage($documentId);
         }
-        return $result;
+
+        return $imageArray;
+    }
+
+    /**
+     * Whatever you want to output to a Twig template can go into a Variable method.
+     * You can have as many variable functions as you want.  From any Twig template,
+     * call it like this:
+
+     *     {{ craft.imageshop.one(documentId) }}
+     *
+     * @param null $optional
+     * @return string
+     */
+    public function one($documentString)
+    {
+        $docIds = explode(',', $documentString);
+
+        return Imageshop::$plugin->image->transformImage($docIds[0]);
+    }
+
+    /**
+     * Whatever you want to output to a Twig template can go into a Variable method.
+     * You can have as many variable functions as you want.  From any Twig template,
+     * call it like this:
+
+     *     {{ craft.imageshop.transformImage(documentId, transforms, defaultOptions) }}
+     *
+     * @param null $optional
+     * @return string
+     */
+    public function transformImage($documentId, $transforms = [], $defaultOptions = [])
+    {
+        return Imageshop::$plugin->image->transformImage($documentId, $transforms, $defaultOptions);
     }
 }

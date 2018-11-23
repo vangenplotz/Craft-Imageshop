@@ -1,20 +1,52 @@
 <template>
-	<div>
-		<input v-model="selectedValue" :name="namespacedId" type="hidden">
+	<div class="elementselect">
+		<input
+			:name="name"
+			:value="selectedString"
+			type="hidden">
 
-		<image-preview :document-id="selectedValue"></image-preview>
+		<draggable v-model="selected" class="elements">
+			<image-preview
+				v-for="documentId in selected"
+				:document-id="documentId"
+				:key="documentId"
+				@remove="remove(documentId)" />
+		</draggable>
 
-		<button class="btn add icon dashed" @click.stop.prevent="showModal">{{ buttonText }}</button>
+		<button v-if="canAddMore" class="btn add icon dashed" @click.stop.prevent="showModal">{{ buttonText }}</button>
 		<div v-show="false">
 			<div class="modal elementselectormodal" ref="modal">
 				<div class="body has-sidebar">
 					<div class="content has-sidebar">
-						<div class="sidebar"></div>
+						<div class="sidebar">
+							<nav>
+								<ul>
+									<li>
+										<a
+											:class="{'sel': activeCategory == null}"
+											@click.stop.prevent="activeCategory = null"
+											tabindex="0"
+										>
+											{{ $t('ALL') }}
+										</a>
+									</li>
+									<li v-for="category in categories" :key="category.CategoryID">
+										<a
+											:class="{'sel': activeCategory == category.CategoryID}"
+											@click.stop.prevent="activeCategory = category.CategoryID"
+											tabindex="0"
+										>
+											{{ category.CategoryName }}
+										</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
 						<div class="main">
 							<div class="toolbar">
 								<div class="flex">
 									<div class="flex-grow texticon search icon clearable">
-										<input v-model="query" class="text fullwidth" type="text" autocomplete="off" placeholder="Søk" ref="queryInput">
+										<input v-model="query" class="text fullwidth" type="text" autocomplete="off" :placeholder="$t('SEARCH')" ref="queryInput">
 										<div v-show="query" class="clear" v-bind:title="$t('REMOVE')" @click="clearQuery"></div>
 									</div>
 									<div v-if="query && isFetchingResults" class="spinner"></div>
@@ -22,7 +54,12 @@
 							</div>
 							<div class="elements" v-infinite-scroll="fetcMore">
 								<ul v-if="results && results.length" class="thumbsview">
-									<li v-for="result in results" v-if="result" :class="{'sel': result.DocumentID === tempValue}" :key="result.DocumentID" tabindex="0" @click.stop.prevent="tempValue = result.DocumentID">
+									<li v-for="result in results"
+										v-if="result"
+										:class="{'disabled': !tempSelected.includes(result.DocumentID) && !canAddMore || selected.includes(result.DocumentID), 'sel': tempSelected.includes(result.DocumentID)}"
+										:key="result.DocumentID"
+										tabindex="0"
+										@click.stop.prevent="toggleSelect(result.DocumentID)">
 										<div class="element large hasthumb">
 											<div class="elementthumb">
 												<img v-bind:src="result.ListThumbUrl">
@@ -40,13 +77,19 @@
 				<div class="footer">
 					<div class="spinner hidden"></div>
 					<div class="buttons right">
-						<div class="btn" tabindex="0" @click.stop.prevent="hideModal">Avbryt</div>
-						<button :class="{'btn submit': true, 'disabled': !tempValue}" :disabled="!tempValue" @click="select">Velg</button>
+						<div class="btn" tabindex="0" @click.stop.prevent="hideModal">{{ $t('CANCEL') }}</div>
+						<button
+							:class="{'btn submit': true, 'disabled': !tempSelected.length}"
+							:disabled="!tempSelected.length"
+							@click="select">
+							<span v-if="maxSelect == 1 || tempSelected.length === 0">{{ $t('CHOOSE') }}</span>
+							<span v-else>{{ $t('CHOOSE_COUNT', {num: tempSelected.length}) }}</span>
+						</button>
 					</div>
-					<div class="buttons left secondary-buttons">
+<!-- 					<div class="buttons left secondary-buttons">
 						<input type="file" multiple="multiple" name="assets-upload" style="display: none;">
 						<div class="btn submit" data-icon="upload" style="position: relative; overflow: hidden;" role="button">Last opp filer</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -55,15 +98,24 @@
 
 <script>
 import axios from 'axios'
-import { debounce } from "debounce"
+import { debounce } from 'debounce'
+import draggable from 'vuedraggable'
 
 import ImagePreview from './components/ImagePreview.vue'
+
+const SEPARATOR = ','
 
 export default {
   name: 'imageshop',
   props: {
   	buttonText: {
   		default: 'Add image'
+  	},
+  	maxSelect: {
+  		default: 0
+  	},
+  	name: {
+  		required: true
   	},
   	namespacedId: {
   		required: true
@@ -74,6 +126,9 @@ export default {
   },
   data() {
   	return {
+  		activeCategory: null,
+  		categories: [],
+  		isFetchingCategories: false,
   		isFetchingResults: false,
   		modal: null,
   		page: 0,
@@ -81,8 +136,17 @@ export default {
   		query: '',
   		resultCount: 0,
   		results: [],
-  		selectedValue: '',
-  		tempValue: '',
+  		selected: [],
+  		tempSelected: [],
+  	}
+  },
+  computed: {
+  	canAddMore() {
+  		const maxSelect = parseInt(this.maxSelect)
+  		return !maxSelect || this.selected.length + this.tempSelected.length < maxSelect
+  	},
+  	selectedString() {
+  		return this.selected.join(SEPARATOR)
   	}
   },
   methods: {
@@ -104,7 +168,29 @@ export default {
   	},
   	fetchCategories() {
   		return new Promise((resolve, reject) => {
-  			resolve(true)
+  			this.isFetchingCategories = true;
+  			axios.get('/actions/imageshop/categories')
+  				.then(response => {
+  					response = (response
+  						&& response.data
+  						&& response.data.GetCategoriesTreeResponse
+  						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult
+  						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult.Root
+  						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult.Root.Children
+  						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult.Root.Children.CategoryTreeNode)
+
+  					this.categories = response
+
+  					console.log(response)
+  					resolve(response)
+  				})
+  				.catch(error => {
+  					reject(error)
+  				})
+  				.then(() => {
+  					this.isFetchingCategories = false;
+  				})
+
   		})
   	},
   	fetcMore() {
@@ -112,11 +198,12 @@ export default {
   		this.page++
   		this.fetchResults(true)
   	},
-  	fetchResults: debounce(function(append = false) {
+  	fetchResults(append = false) {
   		return new Promise((resolve, reject) => {
   			this.isFetchingResults = true
   			axios.get('/actions/imageshop/search', {
   				params: {
+  					categoryIds: this.activeCategory,
   					page: this.page,
   					pagesize: this.pagesize,
   					query: this.query
@@ -147,12 +234,23 @@ export default {
 					this.isFetchingResults = false
 				})
   		})
-  	}, 300, true),
+  	},
+  	fetchResultsDebounce: debounce(function() {
+  		this.fetchResults()
+  	}, 300),
   	hideModal() {
+  		this.tempSelected = []
   		this.modal && this.modal.hide()
   	},
+  	remove(documentId) {
+  		const selectedIndex = this.selected.findIndex(item => item === documentId)
+
+  		if( selectedIndex > -1 ) {
+  			this.selected.splice(selectedIndex, 1)
+  		}
+  	},
   	select() {
-  		this.selectedValue = this.tempValue
+  		this.selected = this.selected.concat(this.tempSelected)
   		this.hideModal()
   	},
   	showModal() {
@@ -161,20 +259,36 @@ export default {
   		} else {
   			this.createModal()
   		}
+  	},
+  	toggleSelect(documentId) {
+  		if( this.selected.includes(documentId) ) { return }
+
+  		const tempSelectIndex = this.tempSelected.findIndex(item => item === documentId)
+
+  		if( tempSelectIndex > -1 ) {
+  			this.tempSelected.splice(tempSelectIndex, 1)
+  		} else if( this.canAddMore ) {
+  			this.tempSelected.push(documentId)
+  		}
   	}
   },
   mounted() {
-  	this.selectedValue = this.initValue
+  	this.selected = this.initValue && this.initValue.split(SEPARATOR) || []
   	this.fetch()
   },
   watch: {
+  	activeCategory() {
+  		this.page = 0
+  		this.fetch()
+  	},
   	modal: 'fetch',
   	query() {
   		this.page = 0
-  		this.fetchResults()
+  		this.fetchResultsDebounce()
   	}
   },
   components: {
+  	draggable,
   	ImagePreview
   }
 }

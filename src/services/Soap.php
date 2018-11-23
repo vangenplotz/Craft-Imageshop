@@ -34,14 +34,54 @@ class Soap extends Component
     // =========================================================================
 
     /**
-     * This function can literally be anything you want, and you can have as many service
-     * functions as you want
+     * Return available categories for the interface
+     * https://webservices.imageshop.no/V4.asmx?op=GetCategoriesTree
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Imageshop::$plugin->soap->categories()
+     *
+     * @return null | Array
+     */
+    public function categories()
+    {
+
+        $settings = Imageshop::$plugin->settings;
+        $token = $settings->token;
+        $interfaceName = $settings->interfaceName;
+        $language = $settings->language;
+
+        // If no token is sent or set in settings, return null
+        if( empty($token) ) {
+            return null;
+        }
+
+        $action = 'http://imageshop.no/V4/GetCategoriesTree';
+
+        $xml  = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        $xml .= "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n";
+        $xml .= "  <soap:Body>\n";
+        $xml .= "    <GetCategoriesTree xmlns=\"http://imageshop.no/V4\">\n";
+        $xml .= "      <token>" . $token . "</token>\n";
+        $xml .= "      <interfacename>" . $interfaceName . "</interfacename>\n";
+        $xml .= "      <language>" . $language . "</language>\n";
+        $xml .= "    </GetCategoriesTree>\n";
+        $xml .= "  </soap:Body>\n";
+        $xml .= "</soap:Envelope>";
+
+        return $this->_request($action, $xml);
+    }
+    
+
+    /**
+     * Return available interfaces for the token
+     * https://webservices.imageshop.no/V4.asmx?op=GetInterfaces
      *
      * From any other plugin file, call it like this:
      *
      *     Imageshop::$plugin->soap->interfaces()
      *
-     * @return mixed
+     * @return null | Array
      */
     public function interfaces($token = '')
     {
@@ -70,14 +110,14 @@ class Soap extends Component
     }
 
     /**
-     * This function can literally be anything you want, and you can have as many service
-     * functions as you want
+     * Get permalink for an image
+     * https://webservices.imageshop.no/V4.asmx?op=CreatePermaLinkFromDocumentId
      *
      * From any other plugin file, call it like this:
      *
      *     Imageshop::$plugin->soap->getImage()
      *
-     * @return mixed
+     * @return Array
      */
     public function getImage($documentId)
     {
@@ -103,18 +143,79 @@ class Soap extends Component
         return $this->_request($action, $xml);
     }
 
+    /**
+     * Return the image data for a document ID
+     * https://webservices.imageshop.no/V4.asmx?op=GetDocumentById
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Imageshop::$plugin->soap->getImageData()
+     *
+     * @return Array
+     */
+    public function getImageData($documentId)
+    {
+        $settings = Imageshop::$plugin->settings;
+        $token = $settings->token;
+        $language = $settings->language;
+        $action = 'http://imageshop.no/V4/GetDocumentById';
+        
+        $xml  = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        $xml .= "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n";
+        $xml .= "  <soap:Body>\n";
+        $xml .= "    <GetDocumentById xmlns=\"http://imageshop.no/V4\">\n";
+        $xml .= "      <token>" . $token . "</token>\n";
+        $xml .= "      <language>" . $language . "</language>\n";
+        $xml .= "      <DocumentID>" . $documentId . "</DocumentID>\n";
+        $xml .= "    </GetDocumentById>\n";
+        $xml .= "  </soap:Body>\n";
+        $xml .= "</soap:Envelope>";
+
+        return $this->_request($action, $xml);
+    }
 
     /**
-     * This function can literally be anything you want, and you can have as many service
-     * functions as you want
+     * Return the image data for a document ID
+     * https://webservices.imageshop.no/V4.asmx?op=CreatePermaLinkFromDocumentId
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Imageshop::$plugin->soap->getImagePermalink($documentId, $width, $height)
+     *
+     * @return Array
+     */
+    public function getImagePermalink($documentId, $width, $height)
+    {
+        $settings = Imageshop::$plugin->settings;
+        $token = $settings->token;
+        $action = 'http://imageshop.no/V4/CreatePermaLinkFromDocumentId';
+        
+        $xml  = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        $xml .= "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n";
+        $xml .= "  <soap:Body>\n";
+        $xml .= "    <CreatePermaLinkFromDocumentId xmlns=\"http://imageshop.no/V4\">\n";
+        $xml .= "      <token>" . $token . "</token>\n";
+        $xml .= "      <documentid>" . $documentId . "</documentid>\n";
+        $xml .= "      <width>" . $width . "</width>\n";
+        $xml .= "      <height>" . $height . "</height>\n";
+        $xml .= "    </CreatePermaLinkFromDocumentId>\n";
+        $xml .= "  </soap:Body>\n";
+        $xml .= "</soap:Envelope>";
+
+        return $this->_request($action, $xml);
+    }
+
+    /**
+     * Search the interface for images or other document types
+     * https://webservices.imageshop.no/V4.asmx?op=Search
      *
      * From any other plugin file, call it like this:
      *
      *     Imageshop::$plugin->soap->search()
      *
-     * @return mixed
+     * @return Array
      */
-    public function search($query = '', $documentType = 'ALL')
+    public function search($query = '', $documentType = 'IMAGE')
     {
         $settings = Imageshop::$plugin->settings;
         $token = $settings->token;
@@ -143,7 +244,7 @@ class Soap extends Component
     // =========================================================================
 
     /**
-     * @return xml
+     * @return SimpleXML
      */
     private function _request($action, $xml)
     {
@@ -157,20 +258,52 @@ class Soap extends Component
             'SOAPAction: ' . $action
         ];
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $xml);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $cacheKey = md5( $url . implode( ', ', $headers ) . $xml );
+        
 
-        $response = curl_exec($curl); 
-        curl_close($curl);
+        if(($cached = Craft::$app->getCache()->get($cacheKey)) !== false)
+        {
+            return $cached;
+        }
 
-        $response1 = str_replace("<soap:Body>", "", $response);
-        $response2 = str_replace("</soap:Body>", "", $response1);
+        try {
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $xml);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
-        return simplexml_load_string($response2);
+            $response = curl_exec($curl); 
+            curl_close($curl);
+
+            $response1 = str_replace("<soap:Body>", "", $response);
+            $response2 = str_replace("</soap:Body>", "", $response1);
+
+            $result = json_decode(json_encode(simplexml_load_string($response2)));
+
+            $cacheDuration = 86400; // 24 hours
+        } catch (\Throwable $e) {
+            Craft::warning("Couldn't get SOAP response: {$e->getMessage()}", __METHOD__);
+            
+            $result = null;
+        
+            $cacheDuration = 300; // 5 minutes
+        }
+
+        Craft::$app->getCache()->set($cacheKey, $result, $cacheDuration);
+    
+        return $result;
+/*        try {
+            $updates = Craft::$app->getApi()->getUpdates();
+            $cacheDuration = 86400; // 24 hours
+        } catch (\Throwable $e) {
+            Craft::warning("Couldn't get updates: {$e->getMessage()}", __METHOD__);
+            $updates = [];
+            $cacheDuration = 300; // 5 minutes
+        }
+
+        Craft::$app->getCache()->set($this->cacheKey, $updates, $cacheDuration);*/
     }
 
 

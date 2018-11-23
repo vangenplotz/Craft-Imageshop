@@ -1,5 +1,18 @@
 <template>
-	<img v-if="url" :src="url" :width="width" :height="height" alt="">
+	<div class="element large hasthumb removable">
+		<a class="delete icon" :title="$t('REMOVE')" @click.stop.prevent="remove">
+			<span class="visuallyhidden">{{ $t('REMOVE') }}</span>
+		</a>
+		<div class="elementthumb">
+			<img
+				v-if="imageData"
+				:src="imageData.ListThumbUrl"
+				:alt="imageData.Description">
+		</div>
+		<div class="label">
+			<span v-if="imageData" class="title">{{ name }}</span>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -14,34 +27,35 @@ export default {
   },
   data() {
   	return {
-  		url: '',
-  		width: 100,
-  		height: 100
+  		imageData: null
+  	}
+  },
+  computed: {
+  	name() {
+  		const name = this.imageData.Name
+  		return name && typeof name === 'string' ? name : this.imageData.Code
   	}
   },
   methods: {
   	fetch() {
   		if( !this.documentId ) { return null }
 
-			axios.get('/actions/imageshop/image/show', {
+			axios.get('/actions/imageshop/search/show', {
 				params: {
 					documentId: this.documentId
 				}
 			})
 				.then(response => {
-					console.log(response)
-/*					if( response ) {
-						const responseData = response.data.CreatePermaLinkFromDocumentIdResponse
-						this.url = responseData.CreatePermaLinkFromDocumentIdResult
-						this.width = responseData.resultwidth
-						this.height = responseData.resultheight
-					}*/
+					if( response && response.data ) {
+						this.imageData = response.data.GetDocumentByIdResponse.GetDocumentByIdResult
+					}
 				})
 				.catch(error => {
 					console.log(error)
 				})
-
-  		console.log('fetch me some image')
+  	},
+  	remove() {
+  		this.$emit('remove')
   	}
   },
   watch: {
@@ -53,5 +67,18 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+	.element {
+		cursor: move;
+	}
 
+	.visuallyhidden {
+		position: absolute;
+	  margin: -1px;
+	  border: 0;
+	  padding: 0;
+	  overflow: hidden;
+	  clip: rect(0 0 0 0);
+	  width: 1px;
+	  height: 1px;
+	}
 </style>

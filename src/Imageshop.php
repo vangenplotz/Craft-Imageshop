@@ -10,6 +10,7 @@
 
 namespace vangenplotz\imageshop;
 
+use vangenplotz\imageshop\services\Image                as ImageService;
 use vangenplotz\imageshop\services\Soap                 as SoapService;
 use vangenplotz\imageshop\variables\ImageshopVariable;
 use vangenplotz\imageshop\models\Settings;
@@ -24,6 +25,7 @@ use craft\services\Fields;
 use craft\web\twig\variables\CraftVariable;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\helpers\UrlHelper;
 
 use yii\base\Event;
 
@@ -66,7 +68,7 @@ class Imageshop extends Plugin
      *
      * @var string
      */
-    public $schemaVersion = '0.0.1';
+    public $schemaVersion = '0.0.2';
 
     // Public Methods
     // =========================================================================
@@ -131,7 +133,13 @@ class Imageshop extends Plugin
             Plugins::EVENT_AFTER_INSTALL_PLUGIN,
             function (PluginEvent $event) {
                 if ($event->plugin === $this) {
-                    // We were just installed
+                    // Send them to our welcome screen
+                    $request = Craft::$app->getRequest();
+                    if ($request->isCpRequest) {
+                        Craft::$app->getResponse()->redirect(UrlHelper::cpUrl(
+                            'settings/plugins/imageshop'
+                        ))->send();
+                    }
                 }
             }
         );
@@ -176,6 +184,7 @@ class Imageshop extends Plugin
     {
         return new Settings();
     }
+
 
     /**
      * Returns the rendered settings HTML, which will be inserted into the content

@@ -39,11 +39,20 @@ class ImageshopImage extends Field
     // =========================================================================
 
     /**
-     * Some attribute
+     * Button text
      *
      * @var string
      */
     public $buttonText = 'Add image';
+
+    /**
+     * Max number om images a user can add
+     * 0 == infinite
+     *
+     * @var string
+     */
+    public $maxSelect = 0;
+
 
     // Static Methods
     // =========================================================================
@@ -77,6 +86,8 @@ class ImageshopImage extends Field
         $rules = array_merge($rules, [
             ['buttonText', 'string'],
             ['buttonText', 'default', 'value' => 'Add image'],
+            ['maxSelect', 'number'],
+            ['maxSelect', 'default', 'value' => 0]
         ]);
         return $rules;
     }
@@ -94,7 +105,7 @@ class ImageshopImage extends Field
      */
     public function getContentColumnType(): string
     {
-        return Schema::TYPE_STRING;
+        return Schema::TYPE_TEXT;
     }
 
     /**
@@ -227,11 +238,17 @@ class ImageshopImage extends Field
      */
     public function getSettingsHtml()
     {
+        $settings = Imageshop::$plugin->settings;
+        $token = $settings->token;
+        $interfaceName = $settings->interfaceName;
+
         // Render the settings template
         return Craft::$app->getView()->renderTemplate(
             'imageshop/_components/fields/ImageshopImage_settings',
             [
                 'field' => $this,
+                'name' => $interfaceName,
+                'token' => $token
             ]
         );
     }
@@ -357,10 +374,12 @@ class ImageshopImage extends Field
         return Craft::$app->getView()->renderTemplate(
             'imageshop/_components/fields/ImageshopImage_input',
             [
+                'buttonText' => $this->buttonText,
                 'name' => $this->handle,
                 'value' => $value,
                 'field' => $this,
                 'id' => $id,
+                'maxSelect' => $this->maxSelect,
                 'namespacedId' => $namespacedId,
             ]
         );
