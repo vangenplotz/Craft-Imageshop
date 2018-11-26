@@ -43,13 +43,20 @@ class Image extends Component
      *
      * @return ImageModel
      */
-    public function transformImage($documentId = null, $transforms = [], $defaultOptions = [])
+    public function transformImage($document = null, $transforms = [], $defaultOptions = [])
     {
-        if( !$documentId ) {
+        if( !$document ) {
             return null;
         }
 
-        return new ImageModel($documentId, $transforms, $defaultOptions);
+        $documentComponents = explode('_', $document);
+        
+        $documentInterface = $documentComponents[0];
+        $documentLanguage = $documentComponents[1];
+        $documentId = $documentComponents[2];
+
+
+        return new ImageModel($documentId, $documentInterface, $documentLanguage, $transforms, $defaultOptions);
     }
 
     /**

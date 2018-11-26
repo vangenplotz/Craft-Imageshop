@@ -59,6 +59,9 @@ class SearchController extends Controller
      */
     public function actionIndex()
     {
+        $interface = Craft::$app->getRequest()->getParam('interface');
+        $language = Craft::$app->getRequest()->getParam('language');
+
         // Category ids, comma separated
         $categoryIds = Craft::$app->getRequest()->getParam('categoryIds');
         $searchString =  "cat:" . (empty($categoryIds) ? '' : $categoryIds);
@@ -84,7 +87,7 @@ class SearchController extends Controller
         $searchString .= " " . (empty($query) ? '' : $query);
 
 
-        return $this->asJson(Imageshop::$plugin->soap->search($searchString));
+        return $this->asJson(Imageshop::$plugin->soap->search($searchString, $interface, $language));
     }
 
     /**
@@ -97,8 +100,9 @@ class SearchController extends Controller
     public function actionShow()
     {
         $documentId = Craft::$app->getRequest()->getParam('documentId');
+        $language = Craft::$app->getRequest()->getParam('language');
 
-        return $this->asJson(Imageshop::$plugin->soap->getImageData($documentId));
+        return $this->asJson(Imageshop::$plugin->soap->getImageData($documentId, $language));
     }
 
 }

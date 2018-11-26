@@ -359,15 +359,10 @@ class ImageshopImage extends Field
         $id = Craft::$app->getView()->formatInputId($this->handle);
         $namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
-        // Variables to pass down to our field JavaScript to let it namespace properly
-        $jsonVars = [
-            'id' => $id,
-            'name' => $this->handle,
-            'namespace' => $namespacedId,
-            'prefix' => Craft::$app->getView()->namespaceInputId(''),
-            ];
-        $jsonVars = Json::encode($jsonVars);
-        //Craft::$app->getView()->registerJs("$('#{$namespacedId}-field').ImageshopImageshopImage(" . $jsonVars . ");");
+        $settings = Imageshop::$plugin->settings;
+        $interfaceName = $settings->interfaceName;
+        $language = $settings->language;
+
         Craft::$app->getView()->registerJs('window.initVueImageshop("' . $namespacedId . '")');
 
         // Render the input template
@@ -379,6 +374,8 @@ class ImageshopImage extends Field
                 'value' => $value,
                 'field' => $this,
                 'id' => $id,
+                'interfaceName' => $interfaceName,
+                'language' => $language,
                 'maxSelect' => $this->maxSelect,
                 'namespacedId' => $namespacedId,
             ]

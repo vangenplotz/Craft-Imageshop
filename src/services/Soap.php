@@ -85,13 +85,15 @@ class Soap extends Component
      */
     public function interfaces($token = '')
     {
-        if( empty($token) ) {
+        if( empty($token) )
+        {
             $settings = Imageshop::$plugin->settings;
             $token = $settings->token;
         }
 
         // If no token is sent or set in settings, return null
-        if( empty($token) ) {
+        if( empty($token) )
+        {
             return null;
         }
 
@@ -149,15 +151,15 @@ class Soap extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Imageshop::$plugin->soap->getImageData()
+     *     Imageshop::$plugin->soap->getImageData($documentId, $language)
      *
      * @return Array
      */
-    public function getImageData($documentId)
+    public function getImageData($documentId, $language = null)
     {
         $settings = Imageshop::$plugin->settings;
         $token = $settings->token;
-        $language = $settings->language;
+        $language = $language ?: $settings->language;
         $action = 'http://imageshop.no/V4/GetDocumentById';
         
         $xml  = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
@@ -215,11 +217,12 @@ class Soap extends Component
      *
      * @return Array
      */
-    public function search($query = '', $documentType = 'IMAGE')
+    public function search($query = '', $interfaceName = null, $language = null,  $documentType = 'IMAGE')
     {
         $settings = Imageshop::$plugin->settings;
         $token = $settings->token;
-        $interfaceName = $settings->interfaceName;
+        $interfaceName = $interfaceName ?: $settings->interfaceName;
+        $language = $language ?: $settings->language;
 
         $action = 'http://imageshop.no/V4/Search';
 
@@ -229,7 +232,7 @@ class Soap extends Component
         $xml .= "    <Search xmlns=\"http://imageshop.no/V4\">\n";
         $xml .= "      <token>" . $token . "</token>\n";
         $xml .= "      <interfacename>" . $interfaceName . "</interfacename>\n";
-        $xml .= "      <language>no</language>\n";
+        $xml .= "      <language>" . $language . "</language>\n";
         $xml .= "      <querystring>" . $query . "</querystring>\n";
         $xml .= "      <documentType>" . $documentType . "</documentType>\n";
         $xml .= "    </Search>\n";

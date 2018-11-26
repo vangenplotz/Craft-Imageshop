@@ -7,10 +7,10 @@
 
 		<draggable v-model="selected" class="elements">
 			<image-preview
-				v-for="documentId in selected"
-				:document-id="documentId"
-				:key="documentId"
-				@remove="remove(documentId)" />
+				v-for="documentValue in selected"
+				:document-value="documentValue"
+				:key="documentValue"
+				@remove="remove(documentValue)" />
 		</draggable>
 
 		<button v-if="canAddMore" class="btn add icon dashed" @click.stop.prevent="showModal">{{ buttonText }}</button>
@@ -49,6 +49,32 @@
 										<input v-model="query" class="text fullwidth" type="text" autocomplete="off" :placeholder="$t('SEARCH')" ref="queryInput">
 										<div v-show="query" class="clear" v-bind:title="$t('REMOVE')" @click="clearQuery"></div>
 									</div>
+									<div>
+										<div class="btn menubtn sortmenubtn">{{ activeInterfaceNameName }}</div>
+										<div class="menu">
+											<ul class="padded sort-attributes">
+												<li v-for="interfaceItem in interfaces">
+													<a :class="{sel: activeInterfaceName == interfaceItem.Path}"
+														@click="activeInterfaceName = interfaceItem.Path">
+														{{ interfaceItem.Name }}
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div>
+										<div class="btn menubtn sortmenubtn">{{ activeLanguageName }}</div>
+										<div class="menu">
+											<ul class="padded sort-attributes">
+												<li v-for="language in languages">
+													<a :class="{sel: activeLanguage == language.key}"
+														@click="activeLanguage = language.key">
+														{{ $t(language.name) }}
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
 									<div v-if="query && isFetchingResults" class="spinner"></div>
 								</div>
 							</div>
@@ -56,7 +82,7 @@
 								<ul v-if="results && results.length" class="thumbsview">
 									<li v-for="result in results"
 										v-if="result"
-										:class="{'disabled': !tempSelected.includes(result.DocumentID) && !canAddMore || selected.includes(result.DocumentID), 'sel': tempSelected.includes(result.DocumentID)}"
+										:class="{'disabled': isDisabled(result.DocumentID), 'sel': isSelected(result.DocumentID)}"
 										:key="result.DocumentID"
 										tabindex="0"
 										@click.stop.prevent="toggleSelect(result.DocumentID)">
@@ -64,7 +90,7 @@
 											<div class="elementthumb">
 												<img v-bind:src="result.ListThumbUrl">
 											</div>
-											<div class="label">{{ result.Name }}</div>
+											<div class="label">{{ getName(result) }}</div>
 										</div>
 									</li>
 								</ul>
@@ -97,6 +123,9 @@
 </template>
 
 <script>
+
+import { DOCUMENTID_INDEX } from './const.js'
+
 import axios from 'axios'
 import { debounce } from 'debounce'
 import draggable from 'vuedraggable'
@@ -108,109 +137,154 @@ const SEPARATOR = ','
 export default {
   name: 'imageshop',
   props: {
-  	buttonText: {
-  		default: 'Add image'
-  	},
-  	maxSelect: {
-  		default: 0
-  	},
-  	name: {
-  		required: true
-  	},
-  	namespacedId: {
-  		required: true
-  	},
-  	initValue: {
-  		default: ''
-  	}
+	buttonText: {
+		default: 'Add image'
+	},
+	defaultInterfaceName: {
+		type: String,
+		required: true
+	},
+	defaultLanguage: {
+		type: String,
+		requried: true
+	},
+	maxSelect: {
+		default: 0
+	},
+	name: {
+		required: true
+	},
+	namespacedId: {
+		required: true
+	},
+	initValue: {
+		default: ''
+	}
   },
   data() {
-  	return {
-  		activeCategory: null,
-  		categories: [],
-  		isFetchingCategories: false,
-  		isFetchingResults: false,
-  		modal: null,
-  		page: 0,
-  		pagesize: 50,
-  		query: '',
-  		resultCount: 0,
-  		results: [],
-  		selected: [],
-  		tempSelected: [],
-  	}
+	return {
+		activeCategory: null,
+		activeInterfaceName: '',
+		activeLanguage: '',
+		categories: [],
+		interfaces: [],
+		isFetchingCategories: false,
+		isFetchingInterfaces: false,
+		isFetchingResults: false,
+		modal: null,
+		page: 0,
+		pagesize: 50,
+		languages: [
+			{ key: 'no', name: 'NORWEGIAN' },
+			{ key: 'en', name: 'ENGLISH' }
+		],
+		query: '',
+		resultCount: 0,
+		results: [],
+		selected: [],
+		tempSelected: [],
+	}
   },
   computed: {
-  	canAddMore() {
-  		const maxSelect = parseInt(this.maxSelect)
-  		return !maxSelect || this.selected.length + this.tempSelected.length < maxSelect
+  	activeInterfaceNameName() {
+  		// Yes it's stupid bug we're getting the interface name's name
+  		const activeInterface = this.interfaces.find(interfaceItem => interfaceItem.Path === this.activeInterfaceName)
+  		return activeInterface && activeInterface.Name || this.activeInterfaceName
   	},
-  	selectedString() {
-  		return this.selected.join(SEPARATOR)
-  	}
+  	activeLanguageName() {
+  		const activeLanguage = this.languages.find(language => language.key === this.activeLanguage)
+  		return activeLanguage && this.$t(activeLanguage.name) || this.activeLanguage
+  	},
+	canAddMore() {
+		const maxSelect = parseInt(this.maxSelect)
+		return !maxSelect || this.selected.length + this.tempSelected.length < maxSelect
+	},
+	selectedString() {
+		return this.selected.join(SEPARATOR)
+	}
   },
   methods: {
-  	clearQuery() {
-  		this.query = ''
-  		this.$refs.queryInput.focus()
-  	},
-  	createModal() {
-  		this.modal = new Garnish.Modal(this.$refs.modal)
-  	},
-  	fetch() {
-  		if( !this.modal ) { return }
+	clearQuery() {
+		this.query = ''
+		this.$refs.queryInput.focus()
+	},
+	createModal() {
+		this.modal = new Garnish.Modal(this.$refs.modal)
+	},
+	fetch() {
+		if( !this.modal ) { return }
 
-  		const results = this.fetchResults()
-  		const categories = this.fetchCategories()
+		const results = this.fetchResults()
+		const categories = this.fetchCategories()
 
-  		return Promise.all([results, categories])
+		return Promise.all([results, categories])
 
-  	},
-  	fetchCategories() {
-  		return new Promise((resolve, reject) => {
-  			this.isFetchingCategories = true;
-  			axios.get('/actions/imageshop/categories')
-  				.then(response => {
-  					response = (response
-  						&& response.data
-  						&& response.data.GetCategoriesTreeResponse
-  						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult
-  						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult.Root
-  						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult.Root.Children
-  						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult.Root.Children.CategoryTreeNode)
-
-  					this.categories = response
-
-  					console.log(response)
-  					resolve(response)
-  				})
-  				.catch(error => {
-  					reject(error)
-  				})
-  				.then(() => {
-  					this.isFetchingCategories = false;
-  				})
-
-  		})
-  	},
-  	fetcMore() {
-  		if( !this.modal ) { return }
-  		this.page++
-  		this.fetchResults(true)
-  	},
-  	fetchResults(append = false) {
-  		return new Promise((resolve, reject) => {
-  			this.isFetchingResults = true
-  			axios.get('/actions/imageshop/search', {
-  				params: {
-  					categoryIds: this.activeCategory,
-  					page: this.page,
-  					pagesize: this.pagesize,
-  					query: this.query
-  				}
-  			})
+	},
+	fetchCategories() {
+		return new Promise((resolve, reject) => {
+			this.isFetchingCategories = true;
+			axios.get('/actions/imageshop/categories')
 				.then(response => {
-		  			if( response && response.data ) {
+					response = (response
+						&& response.data
+						&& response.data.GetCategoriesTreeResponse
+						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult
+						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult.Root
+						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult.Root.Children
+						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult.Root.Children.CategoryTreeNode)
+
+					this.categories = response
+
+					console.log(response)
+					resolve(response)
+				})
+				.catch(error => {
+					reject(error)
+				})
+				.then(() => {
+					this.isFetchingCategories = false;
+				})
+
+		})
+	},
+	fetchInterfaces() {
+		return new Promise((resolve, reject) => {
+			this.isFetchingInterfaces = true
+			axios.get('/actions/imageshop/interface')
+				.then(response => {
+					const responseData = (response
+						&& response.data
+						&& response.data.GetInterfacesResponse
+						&& response.data.GetInterfacesResponse.GetInterfacesResult
+						&& response.data.GetInterfacesResponse.GetInterfacesResult.Interface
+					)
+
+					if(responseData) {
+						this.interfaces = responseData
+					}
+				})
+		})
+	},
+	fetcMore() {
+		if( !this.modal ) { return }
+		this.page++
+		this.fetchResults(true)
+	},
+	fetchResults(append = false) {
+		return new Promise((resolve, reject) => {
+			this.isFetchingResults = true
+			axios.get('/actions/imageshop/search', {
+				params: {
+					categoryIds: this.activeCategory,
+					interface: this.activeInterfaceName,
+					language: this.activeLanguage,
+					page: this.page,
+					pagesize: this.pagesize,
+					query: this.query
+				}
+			})
+				.then(response => {
+					if( response && response.data ) {
 						const searcResult = response.data.SearchResponse.SearchResult
 						const results = searcResult.DocumentList.V4Document
 
@@ -233,63 +307,101 @@ export default {
 				.then(() => {
 					this.isFetchingResults = false
 				})
-  		})
-  	},
-  	fetchResultsDebounce: debounce(function() {
-  		this.fetchResults()
-  	}, 300),
-  	hideModal() {
-  		this.tempSelected = []
-  		this.modal && this.modal.hide()
-  	},
-  	remove(documentId) {
-  		const selectedIndex = this.selected.findIndex(item => item === documentId)
+		})
+	},
+	fetchResultsDebounce: debounce(function() {
+		this.fetchResults()
+	}, 300),
+	getDocumentValue(documentId) {
+		return `${this.activeInterfaceName}_${this.activeLanguage}_${documentId}`
+	},
+	getName(result) {
+		const name = result.Name || false
+		return name && typeof name === 'string' ? name : result.Code
+	},
+	getDocumentIdArray(array) {
+		return array.map(item => {
+			return item.split('_')[DOCUMENTID_INDEX] || false
+		})
+	},
+	hideModal() {
+		this.tempSelected = []
+		this.modal && this.modal.hide()
+	},
+	isDisabled(documentId) {
+		const tempSelectedDocumentIds = this.getDocumentIdArray(this.tempSelected)
+		const selectedDocumentIds = this.getDocumentIdArray(this.selected)
 
-  		if( selectedIndex > -1 ) {
-  			this.selected.splice(selectedIndex, 1)
-  		}
-  	},
-  	select() {
-  		this.selected = this.selected.concat(this.tempSelected)
-  		this.hideModal()
-  	},
-  	showModal() {
-  		if( this.modal ) {
-  			this.modal.show()
-  		} else {
-  			this.createModal()
-  		}
-  	},
-  	toggleSelect(documentId) {
-  		if( this.selected.includes(documentId) ) { return }
+		return  !tempSelectedDocumentIds.includes(documentId) && !this.canAddMore || selectedDocumentIds.includes(documentId)
+	},
+	isSelected(documentId) {
+		return this.getDocumentIdArray(this.tempSelected).includes(documentId)
+	},
+	remove(documentId) {
+		const selectedIndex = this.selected.findIndex(item => item === documentId)
 
-  		const tempSelectIndex = this.tempSelected.findIndex(item => item === documentId)
+		if( selectedIndex > -1 ) {
+			this.selected.splice(selectedIndex, 1)
+		}
+	},
+	select() {
+		this.selected = this.selected.concat(this.tempSelected)
+		this.hideModal()
+	},
+	showModal() {
+		if( this.modal ) {
+			this.modal.show()
+		} else {
+			this.createModal()
+		}
+	},
+	toggleSelect(documentId) {
+		const documentValue = this.getDocumentValue(documentId)
 
-  		if( tempSelectIndex > -1 ) {
-  			this.tempSelected.splice(tempSelectIndex, 1)
-  		} else if( this.canAddMore ) {
-  			this.tempSelected.push(documentId)
-  		}
-  	}
+		console.log(documentValue)
+
+		if( this.selected.includes(documentId) ) { return }
+
+		const tempSelectIndex = this.tempSelected.findIndex(item => item === documentValue)
+
+		if( tempSelectIndex > -1 ) {
+			this.tempSelected.splice(tempSelectIndex, 1)
+		} else if( this.canAddMore ) {
+			this.tempSelected.push(documentValue)
+		}
+	}
   },
   mounted() {
-  	this.selected = this.initValue && this.initValue.split(SEPARATOR) || []
-  	this.fetch()
+	this.activeInterfaceName = this.defaultInterfaceName
+	this.activeLanguage = this.defaultLanguage
+	this.selected = this.initValue && this.initValue.split(SEPARATOR) || []
+	this.fetchInterfaces()
+	this.fetch()
+
+	Craft.initUiElements()
   },
   watch: {
-  	activeCategory() {
-  		this.page = 0
-  		this.fetch()
-  	},
-  	modal: 'fetch',
-  	query() {
-  		this.page = 0
-  		this.fetchResultsDebounce()
-  	}
+	activeCategory() {
+		this.page = 0
+		this.fetch()
+	},
+	activeInterfaceName() {
+		this.page = 0
+		this.fetch()
+	},
+	activeLanguage() {
+		this.page = 0
+		this.fetch()
+	},
+	modal: 'fetch',
+	query() {
+		this.page = 0
+		this.fetchResultsDebounce()
+	}
   },
   components: {
-  	draggable,
-  	ImagePreview
+	draggable,
+	ImagePreview
   }
 }
 </script>

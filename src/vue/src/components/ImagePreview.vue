@@ -16,12 +16,15 @@
 </template>
 
 <script>
+
+import { DOCUMENTID_INDEX, DOCUMENTLANGUAGE_INDEX } from './../const.js'
+
 import axios from 'axios'
 
 export default {
 	name: 'image-preview',
 	props: {
-  	documentId: {
+  	documentValue: {
   		default: ''
   	}
   },
@@ -31,8 +34,17 @@ export default {
   	}
   },
   computed: {
+  	documentArray() {
+  		return this.documentValue.split('_')
+  	},
+  	documentId() {
+  		return this.documentArray[DOCUMENTID_INDEX]
+  	},
+  	documentLanguage() {
+  		return this.documentArray[DOCUMENTLANGUAGE_INDEX]
+  	},
   	name() {
-  		const name = this.imageData.Name
+  		const name = this.imageData.Name || false
   		return name && typeof name === 'string' ? name : this.imageData.Code
   	}
   },
@@ -42,7 +54,8 @@ export default {
 
 			axios.get('/actions/imageshop/search/show', {
 				params: {
-					documentId: this.documentId
+					documentId: this.documentId,
+					language: this.documentLanguage,
 				}
 			})
 				.then(response => {

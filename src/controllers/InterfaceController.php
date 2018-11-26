@@ -61,6 +61,17 @@ class InterfaceController extends Controller
     {
         $token = Craft::$app->getRequest()->getParam('token');
 
+        if( !$token )
+        {
+            $settings = Imageshop::$plugin->settings;
+            $token = $settings->token;
+        }
+
+        if( !$token )
+        {
+            return null;
+        }
+
         return $this->asJson(Imageshop::$plugin->soap->interfaces($token));
     }
 

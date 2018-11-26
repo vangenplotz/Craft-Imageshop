@@ -102,6 +102,20 @@ class ImageModel extends Model
     protected $documentId;
 
     /**
+     * Document interface
+     *
+     * @var string
+     */
+    protected $documentInterface;
+
+    /**
+     * Document language
+     *
+     * @var string
+     */
+    protected $documentLanguage;
+
+    /**
      * Transforms array
      *
      * @var array
@@ -126,11 +140,13 @@ class ImageModel extends Model
      *
      * @throws Exception
      */
-    public function __construct($documentId, $transforms = null, $defaultOptions = [])
+    public function __construct($documentId, $documentInterface, $documentLanguage, $transforms = null, $defaultOptions = [])
     {
         parent::__construct();
 
         $this->documentId = $documentId;
+        $this->documentInterface = $documentInterface;
+        $this->documentLanguage = $documentLanguage;
 
         $imageData = Imageshop::$plugin->image->getImageData($documentId);
         $originalSubdocumet = $imageData->SubDocumentList->V4SubDocument[0];
