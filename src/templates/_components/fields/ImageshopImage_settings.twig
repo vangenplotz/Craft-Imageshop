@@ -17,22 +17,22 @@
 
 {% do view.registerAssetBundle("vangenplotz\\imageshop\\assetbundles\\imageshop\\ImageshopAsset") %}
 
-{% if token is null or name is null %}
+{% if token is null %}
   {% set settingsUrl = cpUrl('/settings/plugins/imageshop') %}
-  <p class="warning">{{ 'Missing token or interface name, please add them in the <a href="#{ settingsUrl }">Imageshop plugin settings</a>.' }}</p>
+  <p class="warning">{{ 'Missing token, please add it in the <a href="#{ settingsUrl }">Imageshop plugin settings</a>.'|t('imageshop') }}</p>
 {% endif %}
 
 {{ forms.textField({
-    label: 'Button text',
-    instructions: 'Text to display on the button.',
+    label: 'Button text'|t,
+    instructions: 'Text to display on the button.'|t,
     id: 'buttonText',
     name: 'buttonText',
     value: field['buttonText']})
 }}
 
 {{ forms.textField({
-    label: 'Max number of images',
-    instructions: 'Maximum number of images the user can select. 0 means infinite',
+    label: 'Max number of images'|t,
+    instructions: 'Maximum number of images the user can select. 0 means infinite'|t,
     id: 'maxSelect',
     name: 'maxSelect',
     value: field['maxSelect']})

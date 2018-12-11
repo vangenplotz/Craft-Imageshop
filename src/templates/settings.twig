@@ -18,25 +18,29 @@
 {% do view.registerAssetBundle("vangenplotz\\imageshop\\assetbundles\\imageshop\\ImageshopAsset") %}
 
 {{ forms.textField({
-    label: 'Token',
+    label: 'Token'|t,
     instructions: 'Imageshop token',
     id: 'token',
     name: 'token',
     value: settings['token']})
 }}
 
+{% if settings['token'] is not empty %}
+  <p class="warning">{{ 'Changing the token will make all previously selected images inaccessible!'|t }}</p>
+{% endif %}
+
 {% set languages = [
   {
-    label: 'Norwegian',
+    label: 'Norwegian'|t,
     value: 'no'
   }, {
-    label: 'English',
+    label: 'English'|t,
     value: 'en'
   }
 ] %}
 
 {{ forms.selectField({
-    label: 'Language',
+    label: 'Language'|t,
     id: 'language',
     name: 'language',
     options: languages,
@@ -45,7 +49,7 @@
 
 <div class="field">
   <div class="heading">
-    <label for="imageshop-settings-interface-name">Interface name</label>
+    <label for="imageshop-settings-interface-name">{{ 'Interface name'|t }}</label>
   </div>
   <div class="input ltr">
     <div class="flex">
@@ -55,7 +59,7 @@
         </select>
       </div>
 
-      <div class="btn" id="imageshop-settings-interface-refresh-button">Refresh</div>
+      <div class="btn" id="imageshop-settings-interface-refresh-button">{{ 'Refresh'|t }}</div>
       <div class="spinner hidden"  id="imageshop-settings-interface-refresh-button-spinner"></div>
     </div>
 
