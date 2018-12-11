@@ -86,7 +86,7 @@ class ImageArrayModel extends Model
      */
     public function one($index = 0)
     {
-        return $this->images[$index];
+        return count($this->images) ? $this->images[$index] : null;
     }
 
 

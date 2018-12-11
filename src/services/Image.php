@@ -125,7 +125,7 @@ class Image extends Component
     {
         $stringArray = [];
 
-        foreach ($ImageshopModelArray as $ImageshopModel) {
+        foreach ($ImageshopModelArray->all() as $ImageshopModel) {
             $stringArray[] = (string)$ImageshopModel['value'];
         }
 

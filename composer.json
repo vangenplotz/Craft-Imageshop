@@ -2,7 +2,7 @@
     "name": "vangenplotz/imageshop",
     "description": "Integrate with an Imageshop account and use Imageshop resources in Craft",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "craft",
         "cms",
