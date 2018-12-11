@@ -12,6 +12,7 @@ namespace vangenplotz\imageshop\fields;
 
 use vangenplotz\imageshop\Imageshop;
 use vangenplotz\imageshop\assetbundles\imageshopimagefield\ImageshopImageFieldAsset;
+use vangenplotz\imageshop\models\ImageArrayModel;
 
 use Craft;
 use craft\base\ElementInterface;
@@ -123,7 +124,19 @@ class ImageshopImage extends Field
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        return $value;
+        //return $value;
+        return new ImageArrayModel($value);
+
+
+/*        $documents = explode(',', $value);
+        $imageArray = [];
+
+        foreach ($documents as $document) {
+            $imageArray[] = Imageshop::$plugin->image->transformImage($document);
+        }
+
+
+        return $imageArray;*/
     }
 
     /**
@@ -141,7 +154,9 @@ class ImageshopImage extends Field
      */
     public function serializeValue($value, ElementInterface $element = null)
     {
-        return parent::serializeValue($value, $element);
+        return Imageshop::$plugin->image->serialize($value);
+
+        //return parent::serializeValue($value, $element);
     }
 
     /**

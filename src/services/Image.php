@@ -45,11 +45,17 @@ class Image extends Component
      */
     public function transformImage($document = null, $transforms = [], $defaultOptions = [])
     {
-        if( !$document ) {
+        if( !$document )
+        {
             return null;
         }
 
         $documentComponents = explode('_', $document);
+
+        if( count($documentComponents) < 3 )
+        {
+            return null;
+        }
         
         $documentInterface = $documentComponents[0];
         $documentLanguage = $documentComponents[1];
@@ -70,13 +76,22 @@ class Image extends Component
      */
     public function getImageData($documentId = null)
     {
-        if( !$documentId ) {
+        if( !$documentId )
+        {
             return null;
         }
 
-        return Imageshop::$plugin->soap->getImageData($documentId)->GetDocumentByIdResponse->GetDocumentByIdResult;
+        $imageData = Imageshop::$plugin->soap->getImageData($documentId);
+
+        if( !$imageData || property_exists($imageData, 'GetDocumentByIdResponse') == false )
+        {
+            return null;
+        }
+
+        return $imageData->GetDocumentByIdResponse->GetDocumentByIdResult;
 
     }
+
     /**
      * Get image transform permalink with document id, width and height
      *
@@ -97,5 +112,24 @@ class Image extends Component
 
     }
 
+    /**
+     * Serialize ImageshopModelArray
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Imageshop::$plugin->image->serialize($ImageshopModelArray)
+     *
+     * @return string
+     */
+    public function serialize($ImageshopModelArray)
+    {
+        $stringArray = [];
 
+        foreach ($ImageshopModelArray as $ImageshopModel) {
+            $stringArray[] = (string)$ImageshopModel['value'];
+        }
+
+        return implode(',', $stringArray);
+
+    }
 }

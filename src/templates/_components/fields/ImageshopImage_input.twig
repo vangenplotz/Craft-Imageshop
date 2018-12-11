@@ -13,53 +13,8 @@
  */
 #}
 
+{% set valueString = craft.imageshop.getValueString(value) %}
+
 <div id="{{ id }}">
-  <imageshop button-text="{{ buttonText }}" default-interface-name="{{ interfaceName }}" default-language="{{ language }}" namespaced-id="{{ namespacedId }}" max-select="{{ maxSelect }}" name="{{ name }}" init-value="{{ value }}"></imageshop>
+  <imageshop button-text="{{ buttonText }}" default-interface-name="{{ interfaceName }}" default-language="{{ language }}" namespaced-id="{{ namespacedId }}" max-select="{{ maxSelect }}" name="{{ name }}" init-value="{{ valueString }}"></imageshop>
 </div>
-
-{# <input type="hidden" name="{{ name }}" id="{{ id }}" value="{{ value }}">
-
-<div id="button-{{ id }}" class="btn add icon dashed">{{ field.buttonText | t }}</div>
-<div style="display: none;">
-  <div id="modal-{{ id }}" class="modal elementselectormodal">
-    <div class="body has-sidebar">
-      <div class="content has-sidebar">
-        <div class="sidebar"></div>
-        <div class="main">
-          <div class="toolbar">
-            <div class="flex">
-              <div class="flex-grow texticon search icon clearable">
-                <input class="text fullwidth" type="text" autocomplete="off" placeholder="Søk">
-                <div class="clear hidden" title="Fjern"></div>
-              </div>
-              
-              <div>
-                <div class="btn menubtn sortmenubtn" title="Sorter etter     Tittel" data-icon="asc" tabindex="0" role="combobox" aria-owns="menu.Garnish836907787" aria-haspopup="true" aria-expanded="false">    Tittel</div>     
-              </div>
-              <div class="btngroup"><div data-view="table" role="button" class="btn" title="Vis som liste" data-icon="list"></div><div data-view="thumbs" role="button" class="btn active" title="Vis som miniatyrbilder" data-icon="grid"></div>   
-            
-            </div>
-            <div class="spinner invisible"></div>
-          </div>
-          <div class="elements">
-            <ul id="modal-results-{{ id }}" class="thumbsview"></ul>
-            <div class="clear"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">
-      <div class="spinner hidden"></div>
-      <div class="buttons right">
-        <div class="btn" tabindex="0">Avbryt</div>
-        <div class="btn disabled submit">Velg</div>
-      </div>
-      <div class="buttons left secondary-buttons">
-        <input type="file" multiple="multiple" name="assets-upload" style="display: none;">
-        <div class="btn submit" data-icon="upload" style="position: relative; overflow: hidden;" role="button">Last opp filer</div>
-      </div>
-    </div>
-
-  </div>
-</div> #}

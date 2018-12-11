@@ -32,58 +32,42 @@ class ImageshopVariable
     // =========================================================================
 
     /**
-     * Whatever you want to output to a Twig template can go into a Variable method.
-     * You can have as many variable functions as you want.  From any Twig template,
-     * call it like this:
-
-     *     {{ craft.imageshop.show(documentId) }}
+     * Get an array with all the images from a field converted to Imageshop models
      *
-     * @param null $optional
-     * @return string
+     *     {{ craft.imageshop.all(documentsString) }}
+     *
+     * @param string $documentsString value from Imageshop field
+     * @return array of Imagshop models
      */
-    public function all($documentsString)
+    public function all($documentsString, $transforms = [], $defaultOptions = [])
     {
         $documents = explode(',', $documentsString);
         $imageArray = [];
 
         foreach ($documents as $document) {
-            $imageArray[] = Imageshop::$plugin->image->transformImage($document);
+            $imageArray[] = Imageshop::$plugin->image->transformImage($document, $transforms, $defaultOptions);
         }
 
         return $imageArray;
     }
 
     /**
-     * Whatever you want to output to a Twig template can go into a Variable method.
-     * You can have as many variable functions as you want.  From any Twig template,
-     * call it like this:
-     * documents is a commaseparated list of documents
+     * Get a single image from an Imageshop field converted to an Imageshop model
      *
-     *     {{ craft.imageshop.one(documents) }}
+     *     {{ craft.imageshop.one(documentsString) }}
      *
-     * @param null $optional
+     * @param string $documentsString value from Imageshop field
      * @return string
      */
-    public function one($documents)
+    public function one($documentsString, $transforms = [], $defaultOptions = [])
     {
-        $documentArray = explode(',', $documents);
+        $document = explode(',', $documentsString);
 
-        return Imageshop::$plugin->image->transformImage($documentArray[0]);
+        return Imageshop::$plugin->image->transformImage($document[0], $transforms, $defaultOptions);
     }
 
-    /**
-     * Whatever you want to output to a Twig template can go into a Variable method.
-     * You can have as many variable functions as you want.  From any Twig template,
-     * call it like this:
-
-     *     {{ craft.imageshop.transformImage(documentId, transforms, defaultOptions) }}
-     *
-     * @param null $optional
-     * @return string
-     */
-    public function transformImage($document, $transforms = [], $defaultOptions = [])
-    {
-        return Imageshop::$plugin->image->transformImage($document, $transforms, $defaultOptions);
+    public function getValueString($ImageshopModelArray) {
+        return Imageshop::$plugin->image->serialize($ImageshopModelArray);
     }
 
 }

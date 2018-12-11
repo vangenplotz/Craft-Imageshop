@@ -91,6 +91,13 @@ class ImageModel extends Model
     public $title = '';
 
 
+    /**
+     * Image value from Imageshop field value
+     *
+     * @var string
+     */
+    public $value = '';
+
     // Protected Properties
     // =========================================================================
 
@@ -136,13 +143,19 @@ class ImageModel extends Model
     /**
      * Constructor
      *
-     * @param $image
+     * @param $documentId string
+     * @param $documentInterface string
+     * @param $documentLanguage string
+     * @param $transforms integer|array
+     * @param $defaultOptions array
      *
      * @throws Exception
      */
     public function __construct($documentId, $documentInterface, $documentLanguage, $transforms = null, $defaultOptions = [])
     {
         parent::__construct();
+
+        $this->value = $documentInterface . '_' . $documentLanguage . '_' . $documentId;
 
         $this->documentId = $documentId;
         $this->documentInterface = $documentInterface;
@@ -166,7 +179,11 @@ class ImageModel extends Model
 
 
     /**
-     * @return mixed|null
+     * Get a single image url for and image given a transform
+     *
+     * @param $transform integer|array An integer width value, or a transform object
+     *
+     * @return string|null
      */
     public function getUrl($transform = null)
     {
@@ -193,6 +210,8 @@ class ImageModel extends Model
     }
 
     /**
+     * Get the original image width to height ratio
+     *
      * @return float|null
      */
     public function ratio()
@@ -207,6 +226,8 @@ class ImageModel extends Model
 
 
     /**
+     * Get the image url from a transform with a given width.
+     *
      * @param $width int|string us when selecting one amongst a set of transforms
      *
      * @return null|string
@@ -227,7 +248,7 @@ class ImageModel extends Model
                     }
                 }
 
-                return null;
+                return $image[0]['url'];
                 
             }
 
@@ -237,6 +258,8 @@ class ImageModel extends Model
     }
 
     /**
+     * Get a srcset string with all the images in a transform
+     *
      * @param $attributes
      *
      * @return null|string
@@ -266,7 +289,10 @@ class ImageModel extends Model
     }
 
     /**
-     * @param $transforms
+     * Create one or more transforms for an image
+     *
+     * @param $transforms integer|array
+     * @param $defaultOptions array
      *
      * @return null || mixed
      */
@@ -283,14 +309,21 @@ class ImageModel extends Model
         if (isset($transforms[0])) {
             $images = [];
             foreach ($transforms as $transform) {
-                $transform = is_array($transform) ? array_merge($this->defaultOptions, $transform) : $transform;
+
+                if( is_array($transform) )
+                {
+                    $transform = array_merge($this->defaultOptions, $transform);
+                }
+                else {
+                    $transform = array_merge($this->defaultOptions, array('width' => $transform));
+                }
+
+                //$transform = is_array($transform) ? array_merge($this->defaultOptions, $transform) : $transform;
                 $transform = $this->calculateTargetSizeFromRatio($transform);
                 $url       = $this->buildTransform($this->documentId, $transform);
                 $images[]  = array_merge($transform, ['url' => $url]);
             }
             $this->transformed = $images;
-
-            return $images;
         }
         else {
             $transforms        = array_merge($this->defaultOptions, $transforms);
@@ -298,9 +331,9 @@ class ImageModel extends Model
             $url               = $this->buildTransform($this->documentId, $transforms);
             $image             = array_merge($transforms, ['url' => $url]);
             $this->transformed = $image;
-
-            return $image;
         }
+
+        return $this;
     }
 
     /**
@@ -377,8 +410,8 @@ class ImageModel extends Model
 
 
     /**
-     * @param $filename
-     * @param $transform
+     * @param $documentId integer
+     * @param $transform array
      *
      * @return string
      */
