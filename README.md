@@ -8,6 +8,8 @@ Integrate with an Imageshop account and use Imageshop resources in Craft
 
 This plugin requires Craft CMS 3.0.0-beta.23 or later.
 
+To use this plugin you need an account with [Imageshop](https://www.imageshop.org/).
+
 ## Installation
 
 To install the plugin, follow these instructions.
@@ -162,6 +164,6 @@ The Imageshop api doesn't seem to cache the image url it creates, and because of
 
 Some things to do, and ideas for potential features:
 
-* Release it
+
 
 Brought to you by [Vangen & Plotz AS](https://vangenplotz.no/)

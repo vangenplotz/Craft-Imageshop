@@ -52,8 +52,8 @@ class CategoriesController extends Controller
     // =========================================================================
 
     /**
-     * Handle a request going to our plugin's index action URL,
-     * e.g.: actions/imageshop/categories
+     * Get all available categories
+     * actions/imageshop/categories
      *
      * @return json
      */

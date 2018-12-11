@@ -52,8 +52,8 @@ class InterfaceController extends Controller
     // =========================================================================
 
     /**
-     * Handle a request going to our plugin's index action URL,
-     * e.g.: actions/imageshop/search
+     * Return interface options for token
+     * e.g.: actions/imageshop/interface
      *
      * @return json
      */

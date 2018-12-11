@@ -52,8 +52,8 @@ class ImageController extends Controller
     // =========================================================================
 
     /**
-     * Handle a request going to our plugin's index action URL,
-     * e.g.: actions/imageshop/image/show
+     * Return data for a single image
+     * actions/imageshop/image/show
      *
      * @return json
      */

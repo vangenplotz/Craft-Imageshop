@@ -297,16 +297,6 @@ class Soap extends Component
         Craft::$app->getCache()->set($cacheKey, $result, $cacheDuration);
     
         return $result;
-/*        try {
-            $updates = Craft::$app->getApi()->getUpdates();
-            $cacheDuration = 86400; // 24 hours
-        } catch (\Throwable $e) {
-            Craft::warning("Couldn't get updates: {$e->getMessage()}", __METHOD__);
-            $updates = [];
-            $cacheDuration = 300; // 5 minutes
-        }
-
-        Craft::$app->getCache()->set($this->cacheKey, $updates, $cacheDuration);*/
     }
 
 

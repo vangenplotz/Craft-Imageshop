@@ -52,8 +52,8 @@ class SearchController extends Controller
     // =========================================================================
 
     /**
-     * Handle a request going to our plugin's index action URL,
-     * e.g.: actions/imageshop/search
+     * Search images
+     * actions/imageshop/search
      *
      * @return json
      */
@@ -91,8 +91,8 @@ class SearchController extends Controller
     }
 
     /**
-     * Show data for a single search result,
-     * e.g.: actions/imageshop/search/show
+     * Show data for a single search result
+     * actions/imageshop/search/show
      * Send the documentId as a body param
      *
      * @return json
