@@ -83,7 +83,7 @@ When you access the ImageshopImage field you get an array of ImageShop-models. T
 | transform()     | Create one or more transforms for an image. Can receive two parameters, a transform or array of transforms, and a default transform property. |
 | transformed     | An array containing all the image transforms, each item has three attributes `url`, `width` and `height`                                      |
 | title           | Image title from Imageshop Name                                                                                                               |
-| value           | Raw field value, comma separated list of image strings `{interface}_{language}_{documentId}`                                                  |
+| value           | Raw field value, comma separated list of image strings `{interface}_{language}_{documentId}`                                                  |
 
 ### Image transforms
 When you use the `getUrl` or the `transform` method you can pass an integer which will be used to set the image width, or a transform object with the attributes:
