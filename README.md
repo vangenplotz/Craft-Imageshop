@@ -75,13 +75,13 @@ When you access the ImageshopImage field you get an array of ImageShop-models. T
 | getUrl()        | Get a single image url for an image given a transform, the transform can be a width or a transform object                                     |
 | originalHeight  | Full height of original                                                                                                                       |
 | originalWidth   | Full width of original                                                                                                                        |
-| imageData       | Raw image data from ImageShop                                                                                                                 |
+| imageData       | Raw image data from ImageShop                                                                                                                 |
 | ratio()         | Get the original image width to height ratio                                                                                                  |
 | rights          | Image rights from Imageshop document Rights                                                                                                   |
 | src()           | Get the image url from a transform with a given width.                                                                                        |
 | srcset()        | Get a srcset string with all the images in a transform                                                                                        |
 | transform()     | Create one or more transforms for an image. Can receive two parameters, a transform or array of transforms, and a default transform property. |
-| transformed     | An array containing all the image transforms, each item has three attributes `url`, `width` and `height`                                      |
+| transformed     | An array containing all the image transforms, each item has three attributes `url`, `width` and `height`                                      |
 | title           | Image title from Imageshop Name                                                                                                               |
 | value           | Raw field value, comma separated list of image strings `{interface}_{language}_{documentId}`                                                  |
 
