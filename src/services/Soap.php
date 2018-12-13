@@ -142,7 +142,9 @@ class Soap extends Component
         $xml .= "  </soap:Body>\n";
         $xml .= "</soap:Envelope>";
 
-        return $this->_request($action, $xml);
+        // Cache image transform for 31536000s (365 days * 24 hours * 60 minutes * 60 seconds)
+        // This request is quite slow, so we want it cached for a long time once made
+        return $this->_request($action, $xml, 31536000);
     }
 
     /**
@@ -247,9 +249,11 @@ class Soap extends Component
     // =========================================================================
 
     /**
+     * @prop $cacheDuration int seconds (86400 = 24h)
+     * 
      * @return SimpleXML
      */
-    private function _request($action, $xml)
+    private function _request($action, $xml, $cacheDuration = 86400)
     {
         $url = 'https://webservices.imageshop.no/V4.asmx';
 
@@ -285,12 +289,12 @@ class Soap extends Component
 
             $result = json_decode(json_encode(simplexml_load_string($response2)));
 
-            $cacheDuration = 86400; // 24 hours
         } catch (\Throwable $e) {
             Craft::warning("Couldn't get SOAP response: {$e->getMessage()}", __METHOD__);
             
             $result = null;
         
+            // Set shorter cache duraction
             $cacheDuration = 300; // 5 minutes
         }
 
