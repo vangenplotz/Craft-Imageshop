@@ -11,3 +11,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.1 - 2018-12-11
 ### Bug fix
 - Fixed bug in editor
+
+## 1.0.3 - 2018-12-13
+### Fixed vulnerabilities
+- Fixed vulnerability with node-sass dependency 'cryptiles'
+- Fixed vulnerability with node-sass dependency 'hoek'
