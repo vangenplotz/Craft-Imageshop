@@ -120,23 +120,11 @@ class ImageshopImage extends Field
      * @param mixed                 $value   The raw field value
      * @param ElementInterface|null $element The element the field is associated with, if there is one
      *
-     * @return mixed The prepared field value
+     * @return ImageArrayModel containing the images
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        //return $value;
         return new ImageArrayModel($value);
-
-
-/*        $documents = explode(',', $value);
-        $imageArray = [];
-
-        foreach ($documents as $document) {
-            $imageArray[] = Imageshop::$plugin->image->transformImage($document);
-        }
-
-
-        return $imageArray;*/
     }
 
     /**
@@ -150,13 +138,11 @@ class ImageshopImage extends Field
      * @param mixed                 $value The value that was set on this field’s corresponding [[ElementCriteriaModel]] param,
      *                                     if any.
      *
-     * @return null|false `false` in the event that the method is sure that no elements are going to be found.
+     * @return string
      */
     public function serializeValue($value, ElementInterface $element = null)
     {
         return Imageshop::$plugin->image->serialize($value);
-
-        //return parent::serializeValue($value, $element);
     }
 
     /**

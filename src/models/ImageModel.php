@@ -179,7 +179,7 @@ class ImageModel extends Model
 
 
     /**
-     * Get a single image url for and image given a transform
+     * Get a single image url for an image given a transform
      *
      * @param $transform integer|array An integer width value, or a transform object
      *

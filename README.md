@@ -157,6 +157,16 @@ In this case all the images will get the same widescreen (16:9) aspect ratio.
 {% endfor %}
 ```
 
+### Element API
+You can access images from the Imageshop field similarly in PHP:
+```php
+if( $image = $entry->imageshopImage->one() )
+{
+  $imageUrl = $image->getUrl(['width' => 400, 'ratio' => 16/9]);
+  $imageAlt = $image->alt;
+}
+```
+
 ## Caching images
 The Imageshop api doesn't seem to cache the image url it creates, and because of this the methods used in this plugin can be fairly slow. Therefore we cache the Imageshop API-responses for 24 hours so that repeat request are much quicker.
 
@@ -164,6 +174,8 @@ The Imageshop api doesn't seem to cache the image url it creates, and because of
 
 Some things to do, and ideas for potential features:
 
+- Let the user upload images to Imageshop from the plugin
 
+The transform syntax and logic used in this plugin was inspired by [Fred Carlsen's](https://github.com/sjelfull/) [Imgix plugin for Craft CMS](https://github.com/sjelfull/imgix).
 
 Brought to you by [Vangen & Plotz AS](https://vangenplotz.no/)
