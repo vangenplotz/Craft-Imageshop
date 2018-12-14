@@ -35,3 +35,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.8 - 2018-12-14
 ### Bugfix
 - Fixed issue with table image preview when empty
+
+## 1.0.9 - 2018-12-14
+### Feature
+- Added base64 encoded transparent pixel property
+- Added original url property
+- Fixed documentation
