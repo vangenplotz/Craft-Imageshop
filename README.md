@@ -173,7 +173,7 @@ if( $image = $entry->imageshopImage->one() )
 ```
 
 ## Caching images
-The Imageshop api doesn't seem to cache the image url it creates, and because of this the methods used in this plugin can be fairly slow. Therefore we cache the Imageshop API-responses for 24 hours so that repeat request are much quicker.
+The Imageshop api doesn't seem to cache the image url it creates, and because of this the methods used in this plugin can be fairly slow. Therefore we cache the Imageshop API-responses for a year so that repeat request are much quicker.
 
 ## Imageshop Roadmap
 
