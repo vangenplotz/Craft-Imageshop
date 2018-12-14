@@ -389,19 +389,20 @@ class ImageshopImage extends Field implements PreviewableFieldInterface
     {
         /** @var ImageArrayModel|null $value */
         
-        if (!$value) {
-            return '';
+        if ( $value && method_exists($value, 'one') && $value->one() ) {
+            $image = $value->one()->transform([30, 60, 100, 200]);
+    
+            return  "<div class='element small hasthumb'>" .
+                        "<div class='elementthumb'>" .
+                            "<img sizes='30px' srcset='{$image->srcset()}' alt='' />" .
+                        "</div>" .
+                        "<div class='label'>" .
+                            "<span class='title'>{$image->title}</span>" .
+                        "</div>" .
+                    "</div>";    
         }
 
-        $image = $value->one()->transform([30, 60, 100, 200]);
-
-        return  "<div class='element small hasthumb'>" .
-                    "<div class='elementthumb'>" .
-                        "<img sizes='30px' srcset='{$image->srcset()}' alt='' />" .
-                    "</div>" .
-                    "<div class='label'>" .
-                        "<span class='title'>{$image->title}</span>" .
-                    "</div>" .
-                "</div>";
+    
+        return '';
     }
 }
