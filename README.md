@@ -84,6 +84,7 @@ When you access the ImageshopImage field you get an array of ImageShop-models. T
 | transform()     | Create one or more transforms for an image. Can receive two parameters, a transform or array of transforms, and a default transform property. |
 | transformed     | An array containing all the image transforms, each item has three attributes `url`, `width` and `height`                                      |
 | title           | Image title from Imageshop Name                                                                                                               |
+| url             | Url to the original image                                                                                                                     |
 | value           | Raw field value, comma separated list of image strings `{interface}_{language}_{documentId}`                                                  |
 
 ### Image transforms
@@ -112,6 +113,9 @@ If only the width or height is defined with no ratio, the image will keep it's o
 We can use the `getUrl` method with an integer, or a transform object. Remember that the Imageshop field always returns an array, if you only want one image select it with `.one()`.
 ```twig
 {% set image = entry.imageshopImage.one() %}
+
+{# Get the full original image url #}
+{{ image.url }}
 
 {# Get image with width of 600 px #}
 {{ image.getUrl(600) }}

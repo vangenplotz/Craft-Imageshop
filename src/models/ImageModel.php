@@ -97,6 +97,13 @@ class ImageModel extends Model
      */
     public $title = '';
 
+    /**
+     * Url to the original image
+     *
+     * @var string
+     */
+    public $url = '';
+
 
     /**
      * Image value from Imageshop field value
@@ -180,6 +187,8 @@ class ImageModel extends Model
 
         $this->transforms = $transforms;
         $this->defaultOptions = $defaultOptions;
+
+        $this->url = $this->buildTransform($documentId, ['width' => $originalSubdocumet->Width, 'height' => $originalSubdocumet->Height]);
 
         $this->transform($transforms);
     }
