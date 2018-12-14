@@ -16,5 +16,5 @@
 {% set valueString = craft.imageshop.getValueString(value) %}
 
 <div id="{{ id }}">
-  <imageshop button-text="{{ buttonText }}" default-interface-name="{{ interfaceName }}" default-language="{{ language }}" namespaced-id="{{ namespacedId }}" max-select="{{ maxSelect }}" name="{{ name }}" init-value="{{ valueString }}"></imageshop>
+  <imageshop button-text="{{ buttonText|t }}" default-interface-name="{{ interfaceName }}" default-language="{{ language }}" namespaced-id="{{ namespacedId }}" max-select="{{ maxSelect }}" name="{{ name }}" init-value="{{ valueString }}"></imageshop>
 </div>

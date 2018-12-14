@@ -23,3 +23,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 1.0.5 - 2018-12-13
 ### Readme bug
+
+## 1.0.6 - 2018-12-14
+### Bugfix
+- Added translation filter to button text
