@@ -42,6 +42,13 @@ class ImageModel extends Model
     public $alt = '';
 
     /**
+     * Image placeholder base64 encoded transparent 1x1px gif
+     *
+     * @var string
+     */
+    public $base64pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+
+    /**
      * Image credits from Imageshop document Credits
      *
      * @var string

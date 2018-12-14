@@ -71,6 +71,7 @@ When you access the ImageshopImage field you get an array of ImageShop-models. T
 | Property/method | Description                                                                                                                                   |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | alt             | Image alt text from Imageshop document Description                                                                                            |
+| base64pixel     | Image placeholder base64 encoded transparent 1x1px gif                                                                                        |
 | credits         | Image credits from Imageshop document Credits                                                                                                 |
 | getUrl()        | Get a single image url for an image given a transform, the transform can be a width or a transform object                                     |
 | originalHeight  | Full height of original                                                                                                                       |
@@ -133,7 +134,7 @@ We access the url by using the `src` method and specifying one of the widths. W
 ```twig
 {% set image = entry.imageshopImage.one().transform([300, 400]) %}
 
-<img src="{{ image.src(400) }}" srcset="{{ image.srcset }}" width="400" height="{{ ( 400 / image.ratio )|round }}" alt="{{ image.alt }}">
+<img src="{{ image.base64pixel }}" srcset="{{ image.srcset }}" width="400" height="{{ ( 400 / image.ratio )|round }}" alt="{{ image.alt }}">
 ```
 
 ### Show multiple images
@@ -142,7 +143,7 @@ In this example we create two transforms for each image; 300px and 400 px wide. 
 {% set images = entry.imageshopImage.transform([300, 400]) %}
 
 {% for image in images %}
-  <img src="{{ image.src(400) }}" srcset="{{ image.srcset }}" width="400" height="{{ ( 400 / image.ratio )|round }}" alt="{{ image.alt }}">
+  <img src="{{ image.base64pixel }}" srcset="{{ image.srcset }}" width="400" height="{{ ( 400 / image.ratio )|round }}" alt="{{ image.alt }}">
 {% endfor %}
 ```
 
@@ -153,7 +154,7 @@ In this case all the images will get the same widescreen (16:9) aspect ratio.
 {% set images = entry.imageshopImage.transform([300, 400], {ratio: 16/9}) %}
 
 {% for image in images %}
-  <img src="{{ image.src(400) }}" srcset="{{ image.srcset }}" width="400" height="{{ ( 400 / ( 16 / 9 ) )|round }}" alt="{{ image.alt }}">
+  <img src="{{ image.base64pixel }}" srcset="{{ image.srcset }}" width="400" height="{{ ( 400 / ( 16 / 9 ) )|round }}" alt="{{ image.alt }}">
 {% endfor %}
 ```
 
