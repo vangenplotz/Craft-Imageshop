@@ -27,3 +27,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.6 - 2018-12-14
 ### Bugfix
 - Added translation filter to button text
+
+## 1.0.7 - 2018-12-14
+### Feature
+- Added content table image preview

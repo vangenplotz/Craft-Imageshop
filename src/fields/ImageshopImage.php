@@ -17,6 +17,7 @@ use vangenplotz\imageshop\models\ImageArrayModel;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
+use craft\base\PreviewableFieldInterface;
 use craft\helpers\Db;
 use yii\db\Schema;
 use craft\helpers\Json;
@@ -34,7 +35,7 @@ use craft\helpers\Json;
  * @package   Imageshop
  * @since     0.0.1
  */
-class ImageshopImage extends Field
+class ImageshopImage extends Field implements PreviewableFieldInterface
 {
     // Public Properties
     // =========================================================================
@@ -381,5 +382,26 @@ class ImageshopImage extends Field
                 'namespacedId' => $namespacedId,
             ]
         );
+    }
+
+
+    public function getTableAttributeHtml($value, ElementInterface $element = null): string
+    {
+        /** @var ImageArrayModel|null $value */
+        
+        if (!$value) {
+            return '';
+        }
+
+        $image = $value->one()->transform([30, 60, 100, 200]);
+
+        return  "<div class='element small hasthumb'>" .
+                    "<div class='elementthumb'>" .
+                        "<img sizes='30px' srcset='{$image->srcset()}' alt='' />" .
+                    "</div>" .
+                    "<div class='label'>" .
+                        "<span class='title'>{$image->title}</span>" .
+                    "</div>" .
+                "</div>";
     }
 }
