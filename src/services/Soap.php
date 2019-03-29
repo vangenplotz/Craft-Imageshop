@@ -206,7 +206,9 @@ class Soap extends Component
         $xml .= "  </soap:Body>\n";
         $xml .= "</soap:Envelope>";
 
-        return $this->_request($action, $xml);
+        // Cache image transform for 31536000s (365 days * 24 hours * 60 minutes * 60 seconds)
+        // This request is quite slow, so we want it cached for a long time once made
+        return $this->_request($action, $xml, 31536000);
     }
 
     /**
