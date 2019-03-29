@@ -41,3 +41,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Added base64 encoded transparent pixel property
 - Added original url property
 - Fixed documentation
+
+## 1.0.10 - 2019-03-29
+### Bugfix
+- Fixed typos in documentation
+- Set permalink cache to 1 year
