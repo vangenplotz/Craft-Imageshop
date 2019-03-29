@@ -28,7 +28,7 @@ To install the plugin, follow these instructions.
 
 ![Imageshop field modal](resources/img/screen-modal.jpg)
 
-The field has been made to mimic the normal Craft asset field. To the right the user can choose to filter the results
+The field has been made to mimic the normal Craft asset field. To the left the user can choose to filter the results
 by the available categories.
 
 There is a search field that lets the user search amongst the images. The results are loaded dynamically as the user scrolls
@@ -124,10 +124,10 @@ We can use the `getUrl` method with an integer, or a transform object. Remember 
 {{ image.getUrl({height: 600}) }}
 
 {# Get image with width 600px and height of 400 px #}
-{{ image.getUrl({width: 600px, height: 400}) }}
+{{ image.getUrl({width: 600, height: 400}) }}
 
 {# Get image with width 600px and 16:9 aspect ratio #}
-{{ image.getUrl({width: 600px, ratio: 16/9}) }}
+{{ image.getUrl({width: 600, ratio: 16/9}) }}
 ```
 
 ### Show one image
