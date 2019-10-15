@@ -56,20 +56,25 @@ class ImageArrayModel extends Model
     {
         parent::__construct();
 
-        $documents = explode(',', $valueString);
-        $imageArray = [];
+        if( gettype($valueString) === "object" ) {
+            $this->images = $valueString;
+        } else {
+            $documents = explode(',', $valueString);
+            $imageArray = [];
 
-        foreach ($documents as $document) {
-            $imageModel = Imageshop::$plugin->image->transformImage($document);
+            foreach ($documents as $document) {
+                $imageModel = Imageshop::$plugin->image->transformImage($document);
 
-            if($imageModel)
-            {
-                $imageArray[] = $imageModel;
+                if($imageModel)
+                {
+                    $imageArray[] = $imageModel;
+                }
             }
+
+
+            $this->images = $imageArray;
         }
 
-
-        $this->images = $imageArray;
     }
 
 
