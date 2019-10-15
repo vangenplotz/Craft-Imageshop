@@ -88,7 +88,7 @@ class Image extends Component
             return null;
         }
 
-        return $imageData->GetDocumentByIdResponse->GetDocumentByIdResult;
+        return $imageData->GetDocumentByIdResponse->GetDocumentByIdResult ?? null;
 
     }
 
