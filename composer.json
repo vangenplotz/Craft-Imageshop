@@ -11,8 +11,8 @@
         "imageshop"
     ],
     "support": {
-        "docs": "https://github.com/vangenplotz/imageshop/blob/master/README.md",
-        "issues": "https://github.com/vangenplotz/imageshop/issues"
+        "docs": "https://github.com/vangenplotz/Craft-Imageshop/blob/master/README.md",
+        "issues": "https://github.com/vangenplotz/Craft-Imageshop/issues"
     },
     "license": "MIT",
     "authors": [
@@ -34,7 +34,7 @@
         "handle": "imageshop",
         "hasCpSettings": true,
         "hasCpSection": false,
-        "changelogUrl": "https://raw.githubusercontent.com/vangenplotz/imageshop/master/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/vangenplotz/craft-imageshop/master/CHANGELOG.md",
         "components": {
             "image": "vangenplotz\\imageshop\\services\\Image",
             "soap": "vangenplotz\\imageshop\\services\\Soap"
