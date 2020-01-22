@@ -176,21 +176,24 @@ class ImageModel extends Model
         $this->documentLanguage = $documentLanguage;
 
         $imageData = Imageshop::$plugin->image->getImageData($documentId);
-        $originalSubdocumet = $imageData->SubDocumentList->V4SubDocument[0];
-        $this->imageData = $imageData;
-        $this->alt = isset($imageData->Description) && is_string($imageData->Description) ? $imageData->Description : "";
-        $this->credits = isset($imageData->Credits) && is_string($imageData->Credits)  ? $imageData->Credits : "";
-        $this->originalWidth = $originalSubdocumet->Width;
-        $this->originalHeight = $originalSubdocumet->Height;
-        $this->rights = isset($imageData->Rights) && is_string($imageData->Rights)  ? $imageData->Rights : "";
-        $this->title = isset($imageData->Name) && is_string($imageData->Name)  ? $imageData->Name : "";
+        if( $imageData  )
+        {        
+            $originalSubdocumet = $imageData->SubDocumentList->V4SubDocument[0];
+            $this->imageData = $imageData;
+            $this->alt = isset($imageData->Description) && is_string($imageData->Description) ? $imageData->Description : "";
+            $this->credits = isset($imageData->Credits) && is_string($imageData->Credits)  ? $imageData->Credits : "";
+            $this->originalWidth = $originalSubdocumet->Width;
+            $this->originalHeight = $originalSubdocumet->Height;
+            $this->rights = isset($imageData->Rights) && is_string($imageData->Rights)  ? $imageData->Rights : "";
+            $this->title = isset($imageData->Name) && is_string($imageData->Name)  ? $imageData->Name : "";
 
-        $this->transforms = $transforms;
-        $this->defaultOptions = $defaultOptions;
+            $this->transforms = $transforms;
+            $this->defaultOptions = $defaultOptions;
 
-        $this->url = $this->buildTransform($documentId, ['width' => $originalSubdocumet->Width, 'height' => $originalSubdocumet->Height]);
+            $this->url = $this->buildTransform($documentId, ['width' => $originalSubdocumet->Width, 'height' => $originalSubdocumet->Height]);
 
-        $this->transform($transforms);
+            $this->transform($transforms);
+        }
     }
 
 
@@ -234,7 +237,7 @@ class ImageModel extends Model
     {
         if( $this->originalWidth == 0 || $this->originalHeight == 0 )
         {
-            return null;
+            return 16/9;
         }
 
         return $this->originalWidth / $this->originalHeight;
@@ -395,7 +398,7 @@ class ImageModel extends Model
         }
 
         // Use default image ratio if no ratio is defined
-        $ratio = isset($transform['ratio']) ? (float)$transform['ratio'] : $this->ratio();
+        $ratio = isset($transform['ratio']) ? (float)$transform['ratio'] : $this->ratio() || 1;
         $w     = isset($transform['width']) ? $transform['width'] : null;
         $h     = isset($transform['height']) ? $transform['height'] : null;
         // If both sizes and ratio is specified, let ratio take control based on width

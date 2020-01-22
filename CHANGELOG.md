@@ -46,3 +46,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Bugfix
 - Fixed typos in documentation
 - Set permalink cache to 1 year
+
+## 1.0.14 - 2020-01-22
+### Bugfix
+- Fixed issue with image that has been removed from ImageShop causing error
