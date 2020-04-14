@@ -50,3 +50,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.14 - 2020-01-22
 ### Bugfix
 - Fixed issue with image that has been removed from ImageShop causing error
+
+## 1.0.15 - 2020-04-14
+### Bugfix
+- Fixed issue with where interface was unavailable when only one was returned from Imageshop
