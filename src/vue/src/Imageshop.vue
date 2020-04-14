@@ -234,8 +234,6 @@ export default {
 						&& response.data.GetCategoriesTreeResponse.GetCategoriesTreeResult.Root.Children.CategoryTreeNode)
 
 					this.categories = response
-
-					console.log(response)
 					resolve(response)
 				})
 				.catch(error => {
@@ -259,8 +257,10 @@ export default {
 						&& response.data.GetInterfacesResponse.GetInterfacesResult.Interface
 					)
 
-					if(responseData) {
+					if(responseData && Array.isArray(responseData)) {
 						this.interfaces = responseData
+					} else {
+						this.interfaces = [responseData]
 					}
 				})
 		})
