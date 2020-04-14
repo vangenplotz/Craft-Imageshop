@@ -58,3 +58,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.16 - 2020-04-14
 ### Bugfix
 - Follow up, fixed interface bug when selecting images as well
+
+## 1.0.17 - 2020-04-14
+### Bugfix
+- Fixed image height stretch in 3.4

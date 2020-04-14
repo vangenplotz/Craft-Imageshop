@@ -415,4 +415,10 @@ export default {
 		display: block;
 		margin: 0 auto;
 	}
+
+	.element.hasthumb .elementthumb img {
+		height: auto;
+		max-width: 100%;
+		max-height: 100%;
+	}
 </style>
