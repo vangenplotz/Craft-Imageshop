@@ -62,3 +62,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.17 - 2020-04-14
 ### Bugfix
 - Fixed image height stretch in 3.4
+
+## 1.0.18 - 2020-04-14
+### Bugfix
+- Fixed a bug where unspecified ratio would always default to 1

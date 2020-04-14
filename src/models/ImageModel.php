@@ -182,8 +182,8 @@ class ImageModel extends Model
             $this->imageData = $imageData;
             $this->alt = isset($imageData->Description) && is_string($imageData->Description) ? $imageData->Description : "";
             $this->credits = isset($imageData->Credits) && is_string($imageData->Credits)  ? $imageData->Credits : "";
-            $this->originalWidth = $originalSubdocumet->Width;
-            $this->originalHeight = $originalSubdocumet->Height;
+            $this->originalWidth = (int)$originalSubdocumet->Width;
+            $this->originalHeight = (int)$originalSubdocumet->Height;
             $this->rights = isset($imageData->Rights) && is_string($imageData->Rights)  ? $imageData->Rights : "";
             $this->title = isset($imageData->Name) && is_string($imageData->Name)  ? $imageData->Name : "";
 
@@ -398,7 +398,7 @@ class ImageModel extends Model
         }
 
         // Use default image ratio if no ratio is defined
-        $ratio = isset($transform['ratio']) ? (float)$transform['ratio'] : $this->ratio() || 1;
+        $ratio = isset($transform['ratio']) ? (float)$transform['ratio'] : $this->ratio() ?: 16/9;
         $w     = isset($transform['width']) ? $transform['width'] : null;
         $h     = isset($transform['height']) ? $transform['height'] : null;
         // If both sizes and ratio is specified, let ratio take control based on width
