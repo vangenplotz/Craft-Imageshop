@@ -56,6 +56,27 @@ class ImageModel extends Model
     public $credits = '';
 
     /**
+     * Document id
+     *
+     * @var string
+     */
+    public $documentId;
+
+    /**
+     * Document interface
+     *
+     * @var string
+     */
+    public $documentInterface;
+
+    /**
+     * Document language
+     *
+     * @var string
+     */
+    public $documentLanguage;
+
+    /**
      * Full height of original
      *
      * @var int
@@ -111,30 +132,11 @@ class ImageModel extends Model
      * @var string
      */
     public $value = '';
+    
 
     // Protected Properties
     // =========================================================================
 
-    /**
-     * Document id
-     *
-     * @var string
-     */
-    protected $documentId;
-
-    /**
-     * Document interface
-     *
-     * @var string
-     */
-    protected $documentInterface;
-
-    /**
-     * Document language
-     *
-     * @var string
-     */
-    protected $documentLanguage;
 
     /**
      * Transforms array

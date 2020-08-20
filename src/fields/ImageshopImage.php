@@ -13,10 +13,12 @@ namespace vangenplotz\imageshop\fields;
 use vangenplotz\imageshop\Imageshop;
 use vangenplotz\imageshop\assetbundles\imageshopimagefield\ImageshopImageFieldAsset;
 use vangenplotz\imageshop\models\ImageArrayModel;
+use vangenplotz\imageshop\records\ImageshopAsset;
 
 use Craft;
+use craft\elements\Asset;
 use craft\base\ElementInterface;
-use craft\base\Field;
+use craft\fields\BaseRelationField;
 use craft\base\PreviewableFieldInterface;
 use craft\helpers\Db;
 use yii\db\Schema;
@@ -35,8 +37,13 @@ use craft\helpers\Json;
  * @package   Imageshop
  * @since     0.0.1
  */
-class ImageshopImage extends Field implements PreviewableFieldInterface
+class ImageshopImage extends BaseRelationField implements PreviewableFieldInterface
 {
+
+    protected static function elementType(): string
+    {
+        return Asset::class;
+    }
     // Public Properties
     // =========================================================================
 
@@ -125,26 +132,55 @@ class ImageshopImage extends Field implements PreviewableFieldInterface
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        return new ImageArrayModel($value);
+        if($value) {
+            echo "<pre>";
+            var_dump($value);
+            echo "</pre>";
+            die();
+        }
+
+        //return new ImageArrayModel($value, $element, $this->handle);
+        /*return \craft\elements\Asset::find()
+            ->relatedTo(['or', ['sourceElement' => $element, 'field' => $this->handle]])
+            ->all();*/
+
+        // Asset id array to return
+/*        $assetIds = [];
+
+        // Value is string with comma separated imageshop image string representation (`{documentInterface}_{documentLanguage}_{documentId}`)
+        // We need to get assets for each image that has an asset, and create assets for those that don't
+        $imageshopImageStringArray = explode(",", $value);
+
+        // We foreach to maintain correct image order
+        foreach ($imageshopImageStringArray as $imageshopImageString) {
+            // Get imageshop image instance
+            if($imageshopImageInstance = Imageshop::$plugin->image->transformImage($imageshopImageString))
+            {            
+                // Check and see if ther exists and asset for this image already
+                $imageShopAsset = ImageshopAsset::find()
+                    ->where([
+                        'imageshopDocumentInterface' => $imageshopImageInstance->documentInterface,
+                        'imageshopDocumentLanguage' => $imageshopImageInstance->documentLanguage,
+                        'imageshopDocumentId' => $imageshopImageInstance->documentId
+                    ])
+                    ->one();
+
+                // If image has already been saved, add its id to the array
+                if($imageShopAsset)
+                {
+                    $assetIds[] = $imageShopAsset->assetId;
+                // If not; Create new asset from imagehop instance and add the id to the array
+                } elseif($asset = Imageshop::$plugin->image->createAssetFromImageshopImage($imageshopImageInstance))
+                {
+                    $assetIds[] = $asset->id;
+                }
+            }
+            
+        }*/
+
+        return parent::normalizeValue($value, $element);
     }
 
-    /**
-     * Modifies an element query.
-     *
-     * This method will be called whenever elements are being searched for that may have this field assigned to them.
-     *
-     * If the method returns `false`, the query will be stopped before it ever gets a chance to execute.
-     *
-     * @param ElementQueryInterface $query The element query
-     * @param mixed                 $value The value that was set on this field’s corresponding [[ElementCriteriaModel]] param,
-     *                                     if any.
-     *
-     * @return string
-     */
-    public function serializeValue($value, ElementInterface $element = null)
-    {
-        return Imageshop::$plugin->image->serialize($value);
-    }
 
     /**
      * Returns the component’s settings HTML.
