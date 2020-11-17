@@ -70,3 +70,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.19 - 2020-11-17
 ### Bugfix
 - Fixed compatibility w/Composer 2 (Bug #15)
+
+## 1.0.20 - 2020-11-17
+### Bugfix
+- Reverted accidental v2 changes
