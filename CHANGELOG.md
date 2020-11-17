@@ -66,3 +66,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.18 - 2020-04-14
 ### Bugfix
 - Fixed a bug where unspecified ratio would always default to 1
+
+## 1.0.19 - 2020-11-17
+### Bugfix
+- Fixed compatibility w/Composer 2 (Bug #15)
