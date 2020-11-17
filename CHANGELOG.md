@@ -74,3 +74,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.20 - 2020-11-17
 ### Bugfix
 - Reverted accidental v2 changes
+
+## 1.0.21 - 2020-11-17
+### Bugfix
+- Removed deprecation warning

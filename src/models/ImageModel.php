@@ -398,7 +398,7 @@ class ImageModel extends Model
         }
 
         // Use default image ratio if no ratio is defined
-        $ratio = isset($transform['ratio']) ? (float)$transform['ratio'] : $this->ratio() ?: 16/9;
+        $ratio = (isset($transform['ratio']) ? (float)$transform['ratio'] : $this->ratio()) ?: 16/9;
         $w     = isset($transform['width']) ? $transform['width'] : null;
         $h     = isset($transform['height']) ? $transform['height'] : null;
         // If both sizes and ratio is specified, let ratio take control based on width
