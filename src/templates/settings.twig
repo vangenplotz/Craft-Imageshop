@@ -66,25 +66,6 @@
   </div>
 </div>
 
-<div class="field">
-  {% if folders|length == 0 %}
-    <div class="readable">
-      <blockquote class="note warning">
-        <p>{{ 'Please create a volume and folder that Imageshop assets can be uploaded to'|t }}</p>
-      </blockquote>
-    </div>
-  {% else %}
-      {{ forms.selectField({
-          label: 'Upload folder'|t,
-          instructions: 'Folder where Imageshop images should be uploaded to'|t,
-          id: 'uploadFolder',
-          name: 'uploadFolder',
-          options: folders,
-          value: settings['uploadFolder']})
-      }}
-  {% endif %}
-</div>
-
 
 {% js %}
   var imageshopSettingsPageInterfaceSelect = $('#settings-imageshop-settings-interface-name').first();

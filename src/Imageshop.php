@@ -25,7 +25,6 @@ use craft\services\Fields;
 use craft\web\twig\variables\CraftVariable;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
-use craft\models\FolderCriteria;
 use craft\helpers\UrlHelper;
 
 use yii\base\Event;
@@ -69,7 +68,7 @@ class Imageshop extends Plugin
      *
      * @var string
      */
-    public $schemaVersion = '2.0.0';
+    public $schemaVersion = '0.0.2';
 
     // Public Methods
     // =========================================================================
@@ -195,32 +194,9 @@ class Imageshop extends Plugin
      */
     protected function settingsHtml(): string
     {
-        $settings = $this->getSettings();
-
-        $volumes = array_map(function($volume) {
-            return [
-                'label' => $volume->name,
-                'value' => $volume->id
-            ];
-        }, Craft::$app->volumes->allVolumes);
-
-        $folders = [];
-
-        foreach (Craft::$app->volumes->allVolumes as $volume) {
-            $folderCriteria = new FolderCriteria(["volumeId" => $volume->id]);
-
-            foreach (Craft::$app->assets->findFolders($folderCriteria) as $folder) {
-                $folders[] = [
-                    'label' => $folder->name . " (Volume: " . $volume->name . ")",
-                    'value' => $folder->id
-                ];
-            }
-        }
-
         return Craft::$app->view->renderTemplate(
             'imageshop/settings',
             [
-                'folders' => $folders,
                 'settings' => $this->getSettings()
             ]
         );

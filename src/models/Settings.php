@@ -56,14 +56,6 @@ class Settings extends Model
      */
     public $language = 'no';
 
-
-    /**
-     * Upload folder
-     *
-     * @var string
-     */
-    public $uploadFolder = -1;
-
     // Public Methods
     // =========================================================================
 
@@ -83,8 +75,7 @@ class Settings extends Model
             [['token', 'interfaceName', 'language'], 'required'],
             ['token', 'string'],
             ['interfaceName', 'string'],
-            ['language', 'string'],
-            ['uploadFolder', 'integer']
+            ['language', 'string']
         ];
     }
 }

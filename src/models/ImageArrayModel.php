@@ -52,21 +52,11 @@ class ImageArrayModel extends Model
      *
      * @throws Exception
      */
-    public function __construct($valueString, $element, $fieldHandle)
+    public function __construct($valueString)
     {
         parent::__construct();
 
-        // Get assets
-        $assets = \craft\elements\Asset::find()
-            ->relatedTo(['or', ['sourceElement' => $element, 'field' => $fieldHandle]])
-            ->all();
-
-        echo('<pre>');
-        var_dump($assets);
-        echo('</pre>');
-        die();
-
-/*        if( gettype($valueString) === "object" ) {
+        if( gettype($valueString) === "object" ) {
             $this->images = $valueString;
         } else {
             $documents = explode(',', $valueString);
@@ -84,7 +74,7 @@ class ImageArrayModel extends Model
 
             $this->images = $imageArray;
         }
-*/
+
     }
 
 
