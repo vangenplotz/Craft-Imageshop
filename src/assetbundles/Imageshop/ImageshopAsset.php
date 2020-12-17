@@ -43,7 +43,7 @@ class ImageshopAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = "@vangenplotz/imageshop/assetbundles/imageshop/dist";
+        $this->sourcePath = "@vangenplotz/imageshop/assetbundles/Imageshop/dist";
 
         // define the dependencies
         $this->depends = [

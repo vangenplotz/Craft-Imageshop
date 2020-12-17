@@ -78,3 +78,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.21 - 2020-11-17
 ### Bugfix
 - Removed deprecation warning
+
+## 1.0.22 - 2020-12-17
+### Bugfix
+- Fixed references to old asset bundle path causing errors fro some users
