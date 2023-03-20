@@ -125,6 +125,10 @@ class ImageshopImage extends Field implements PreviewableFieldInterface
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
+        if (is_a($value, ImageArrayModel::class)) {
+            return $value;
+        }
+        
         return new ImageArrayModel($value);
     }
 
