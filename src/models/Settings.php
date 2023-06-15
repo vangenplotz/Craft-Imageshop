@@ -39,14 +39,14 @@ class Settings extends Model
      *
      * @var string
      */
-    public $token = '';
+    public string $token = '';
 
     /**
      * Imageshop interface name
      *
      * @var string
      */
-    public $interfaceName = '';
+    public string $interfaceName = '';
 
 
     /**
@@ -54,7 +54,7 @@ class Settings extends Model
      *
      * @var string
      */
-    public $language = 'no';
+    public string $language = 'no';
 
     // Public Methods
     // =========================================================================
@@ -69,7 +69,7 @@ class Settings extends Model
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['token', 'interfaceName', 'language'], 'required'],
