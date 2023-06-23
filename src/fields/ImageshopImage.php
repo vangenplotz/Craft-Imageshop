@@ -82,7 +82,7 @@ class ImageshopImage extends Field implements PreviewableFieldInterface
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         $rules = array_merge($rules, [
@@ -123,7 +123,7 @@ class ImageshopImage extends Field implements PreviewableFieldInterface
      *
      * @return ImageArrayModel containing the images
      */
-    public function normalizeValue($value, ElementInterface $element = null)
+    public function normalizeValue(mixed $value, ?\craft\base\ElementInterface $element = null): mixed
     {
         if (is_a($value, ImageArrayModel::class)) {
             return $value;
@@ -145,7 +145,7 @@ class ImageshopImage extends Field implements PreviewableFieldInterface
      *
      * @return string
      */
-    public function serializeValue($value, ElementInterface $element = null)
+    public function serializeValue(mixed $value, ?\craft\base\ElementInterface $element = null): mixed
     {
         return Imageshop::$plugin->image->serialize($value);
     }
@@ -242,7 +242,7 @@ class ImageshopImage extends Field implements PreviewableFieldInterface
      *
      * @return string|null
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): string
     {
         $settings = Imageshop::$plugin->settings;
         $token = $settings->token;
@@ -356,7 +356,7 @@ class ImageshopImage extends Field implements PreviewableFieldInterface
      *
      * @return string The input HTML.
      */
-    public function getInputHtml($value, ElementInterface $element = null): string
+    public function getInputHtml(mixed $value, ?\craft\base\ElementInterface $element = null): string
     {
         // Register our asset bundle
         Craft::$app->getView()->registerAssetBundle(ImageshopImageFieldAsset::class);
@@ -389,7 +389,7 @@ class ImageshopImage extends Field implements PreviewableFieldInterface
     }
 
 
-    public function getTableAttributeHtml($value, ElementInterface $element = null): string
+    public function getTableAttributeHtml(mixed $value, ElementInterface $element = null): string
     {
         /** @var ImageArrayModel|null $value */
         

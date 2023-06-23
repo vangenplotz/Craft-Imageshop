@@ -68,7 +68,7 @@ class Imageshop extends Plugin
      *
      * @var string
      */
-    public $schemaVersion = '0.0.2';
+    public string $schemaVersion = '2.0.0';
 
     // Public Methods
     // =========================================================================
@@ -180,7 +180,7 @@ class Imageshop extends Plugin
      *
      * @return \craft\base\Model|null
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?\craft\base\Model
     {
         return new Settings();
     }

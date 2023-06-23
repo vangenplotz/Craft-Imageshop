@@ -293,9 +293,9 @@ class Soap extends Component
 
         } catch (\Throwable $e) {
             Craft::warning("Couldn't get SOAP response: {$e->getMessage()}", __METHOD__);
-            
+
             $result = null;
-        
+
             // Set shorter cache duraction
             $cacheDuration = 300; // 5 minutes
         }
